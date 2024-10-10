@@ -4,7 +4,7 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-List<Usuario> usuarios = [
+List<GetUsuarioDto> usuarios = [
 
         new (
             1,
@@ -35,10 +35,23 @@ List<Usuario> usuarios = [
         )
 ];
 
+// Configurar rutas GET
+
 app.MapGet("usuarios/{id}", (int id) => {
     return usuarios.Find(usuarios => usuarios.ID == id);
 }).WithName("GetUsuario"); // nombre de la ruta
 
 app.MapGet("/", () => "Conectado a servidor!");
+
+// Configurar rutas POST
+
+app.MapPost("usuarios", (CreateUsuarioDto newUsuario) => {
+    int id = usuarios.Count + 1; // reemplazar por ID generado por la BD
+    GetUsuarioDto usuario = new(id,newUsuario.Nombre, newUsuario.Apellido, newUsuario.Email, newUsuario.Telefono, newUsuario.Direccion, newUsuario.EsCliente);
+
+    usuarios.Add(usuario);
+
+    return Results.CreatedAtRoute("GetCourse", new { id = id }, usuario);
+});
 
 app.Run();
