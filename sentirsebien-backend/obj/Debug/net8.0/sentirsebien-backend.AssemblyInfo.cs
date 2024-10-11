@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("sentirsebien-backend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+46bae7bba5e0352a6c9a5afd1e986c12c462e82b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+020deee709d824e834231e884f2719c2ada254b3")]
 [assembly: System.Reflection.AssemblyProductAttribute("sentirsebien-backend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("sentirsebien-backend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
