@@ -1,4 +1,5 @@
 ﻿using sentirsebien_backend.Domain.Services;
+using System.Collections.Generic;
 
 namespace sentirsebien_backend.Domain.Entities
 {
@@ -16,9 +17,8 @@ namespace sentirsebien_backend.Domain.Entities
         private int id;
         private string nombre;
         private string email;
-
-        // private string contraseña;
         private string hashContraseña; // almacenar hash en lugar de contraseña
+        private HashSet<TipoRol> roles;
 
         public int Id
         {
@@ -44,13 +44,18 @@ namespace sentirsebien_backend.Domain.Entities
             set { hashContraseña = value; }
         }
 
-        public Usuario(int id, string nombre, string email, string contraseña, IPasswordService passwordService)
+        public HashSet<TipoRol> Roles
+        {
+            get { return roles; }
+            set { roles = value; }
+        }
+
+        public Usuario(int id, string nombre, string email, string contraseña, IPasswordService passwordService, HashSet<TipoRol> roles)
         {
             this.id = id;
             this.nombre = nombre;
             this.email = email;
-
-            // this.contraseña = contraseña;
+            this.roles = roles;
             this.hashContraseña = passwordService.HashPassword(contraseña); // hashear la contraseña antes de almacenarla
         }
 
@@ -70,6 +75,10 @@ namespace sentirsebien_backend.Domain.Entities
         {
             return $"Usuario: {nombre} (Email: {email})";
         }
-    }
 
+        public bool TieneRol(TipoRol rol)
+        {
+            return roles.Contains(rol);
+        }
+    }
 }
