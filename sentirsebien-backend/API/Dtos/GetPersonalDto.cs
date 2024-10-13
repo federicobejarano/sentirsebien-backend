@@ -1,4 +1,4 @@
-﻿namespace sentirsebien_backend.Dtos
+﻿namespace sentirsebien_backend.API.Dtos
 {
     public record class GetPersonalDto(int ID, int IDUsuario, decimal SalarioTotal)
     {

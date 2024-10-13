@@ -2,8 +2,10 @@
 {
     public interface IAutenticacionService
     {
-        bool AutenticarUsuario(string username, string password);
-        string GenerarToken(string username);
-        void InvalidarToken(string token);
+        bool AutenticarUsuario(string username, string password); // autenticar con username y password
+        string GenerarToken(string username);                     // generar un token JWT
+        void InvalidarToken(string token);                        // invalidar un token (logout)
+        bool RegistrarUsuario(string username, string email, string password);
     }
+
 }

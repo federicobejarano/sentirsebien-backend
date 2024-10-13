@@ -1,4 +1,4 @@
-using sentirsebien_backend.Dtos;
+using sentirsebien_backend.API.Dtos;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);

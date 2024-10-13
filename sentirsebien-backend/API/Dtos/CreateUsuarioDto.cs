@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace sentirsebien_backend.Dtos
+namespace sentirsebien_backend.API.Dtos
 {
     public record CreateUsuarioDto
     {

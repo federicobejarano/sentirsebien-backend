@@ -1,4 +1,4 @@
-﻿namespace sentirsebien_backend.Dtos
+﻿namespace sentirsebien_backend.API.Dtos
 {
     public record GetUsuarioDto(int ID, string Nombre, string Apellido, string Email, string Telefono, string Direccion, bool EsCliente)
     {
@@ -16,6 +16,6 @@
         public Cliente? Cliente { get; set; }
         public GetPersonalDto? Personal { get; set; }
 
-        
+
     }
 }
