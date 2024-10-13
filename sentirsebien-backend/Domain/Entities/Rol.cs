@@ -1,11 +1,14 @@
-﻿namespace sentirsebien_backend.Domain.Entities
+﻿using sentirsebien_backend.Domain.Services;
+
+namespace sentirsebien_backend.Domain.Entities
 {
     public class Rol
     {
-        private int id;
+        private Guid id;
         private string nombreRol;
+        private TipoRol tipo;
 
-        public int Id
+        public Guid Id
         {
             get { return id; }
             set { id = value; }
@@ -17,16 +20,22 @@
             set { nombreRol = value; }
         }
 
-        public Rol(int id, string nombreRol)
+        public TipoRol Tipo
+        {
+            get { return tipo; }
+            set { tipo = value; }
+        }
+
+        public Rol(Guid id, string nombreRol, TipoRol tipo)
         {
             this.id = id;
             this.nombreRol = nombreRol;
+            this.tipo = tipo;
         }
 
         public override string ToString()
         {
-            return $"Rol: {nombreRol}";
+            return $"Rol: {nombreRol}, Tipo: {tipo}";
         }
     }
-
 }

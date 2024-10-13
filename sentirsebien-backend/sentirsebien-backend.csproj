@@ -7,4 +7,8 @@
     <RootNamespace>sentirsebien_backend</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.1.2" />
+  </ItemGroup>
+
 </Project>
