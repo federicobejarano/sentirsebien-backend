@@ -19,7 +19,7 @@ namespace sentirsebien_backend.DataAccess.Repositories
 
             public Usuario ObtenerPorId(Guid usuarioId)
             {
-                return _context.Usuarios.Find(usuarioId);
+                return _context.Usuarios.Find(usuarioId); 
             }
 
             public Usuario ObtenerPorId(int id)
