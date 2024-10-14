@@ -12,5 +12,4 @@ namespace sentirsebien_backend.DataAccess.Models
         public virtual Usuario Usuario { get; set; }
         public virtual Rol Rol { get; set; }
     }
-
 }

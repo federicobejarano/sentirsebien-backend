@@ -4,11 +4,11 @@ namespace sentirsebien_backend.Domain.Entities
 {
     public class Rol
     {
-        private Guid id;
+        private int id;
         private string nombreRol;
         private TipoRol tipo;
 
-        public Guid Id
+        public int Id
         {
             get { return id; }
             set { id = value; }
@@ -26,7 +26,7 @@ namespace sentirsebien_backend.Domain.Entities
             set { tipo = value; }
         }
 
-        public Rol(Guid id, string nombreRol, TipoRol tipo)
+        public Rol(int id, string nombreRol, TipoRol tipo)
         {
             this.id = id;
             this.nombreRol = nombreRol;
