@@ -5,12 +5,12 @@ namespace sentirsebien_backend.Domain.Services
     public interface IGestorRolesService
     {
         // asignar un rol a un usuario
-        void AsignarRol(Guid usuarioId, TipoRol tipoRol);
+        void AsignarRol(int usuarioId, TipoRol tipoRol);
 
         // eliminar un rol de un usuario
-        void EliminarRol(Guid usuarioId, TipoRol tipoRol);
+        void EliminarRol(int usuarioId, TipoRol tipoRol);
 
         // obtener la lista de roles asignados a un usuario
-        List<Rol> ObtenerRolesPorUsuario(Guid usuarioId);
+        List<Rol> ObtenerRolesPorUsuario(int usuarioId);
     }
 }

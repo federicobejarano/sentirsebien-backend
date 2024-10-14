@@ -16,7 +16,7 @@ namespace sentirsebien_backend.Domain.Services
         }
 
         // verificar si el usuario tiene un rol específico
-        public bool TieneRol(Guid usuarioId, TipoRol rol)
+        public bool TieneRol(int usuarioId, TipoRol rol)
         {
             var usuario = _usuarioRepository.ObtenerPorId(usuarioId);
             if (usuario == null) return false;
@@ -26,7 +26,7 @@ namespace sentirsebien_backend.Domain.Services
         }
 
         // verificar si el usuario tiene un permiso específico
-        public bool TienePermiso(Guid usuarioId, string permiso)
+        public bool TienePermiso(int usuarioId, string permiso)
         {
             var usuario = _usuarioRepository.ObtenerPorId(usuarioId);
             if (usuario == null) return false;
@@ -36,7 +36,7 @@ namespace sentirsebien_backend.Domain.Services
         }
 
         // verificar si el usuario tiene acceso a una acción específica
-        public bool TieneAcceso(Guid usuarioId, string accion)
+        public bool TieneAcceso(int usuarioId, string accion)
         {
             // en este caso, la acción puede mapearse a un permiso específico
             return TienePermiso(usuarioId, accion);

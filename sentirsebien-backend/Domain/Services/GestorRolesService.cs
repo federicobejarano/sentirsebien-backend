@@ -14,8 +14,8 @@ namespace sentirsebien_backend.Domain.Services
             _usuarioRepository = usuarioRepository;
         }
 
-        // Asigna un rol a un usuario
-        public void AsignarRol(Guid usuarioId, TipoRol tipoRol)
+        // asignar un rol a un usuario
+        public void AsignarRol(int usuarioId, TipoRol tipoRol)
         {
             var usuario = _usuarioRepository.ObtenerPorId(usuarioId);
             if (usuario == null)
@@ -23,14 +23,14 @@ namespace sentirsebien_backend.Domain.Services
                 throw new Exception("Usuario no encontrado.");
             }
 
-            // Convertir TipoRol (enum) a Rol (entidad)
+            // convertir TipoRol (enum) a Rol (entidad)
             var rol = ConvertirTipoRolAEntidadRol(tipoRol);
 
             _rolRepository.AsignarRolAUsuario(usuarioId, rol);
         }
 
-        // Elimina un rol de un usuario
-        public void EliminarRol(Guid usuarioId, TipoRol tipoRol)
+        // eliminar un rol de un usuario
+        public void EliminarRol(int usuarioId, TipoRol tipoRol)
         {
             var usuario = _usuarioRepository.ObtenerPorId(usuarioId);
             if (usuario == null)
@@ -44,8 +44,8 @@ namespace sentirsebien_backend.Domain.Services
             _rolRepository.EliminarRolDeUsuario(usuarioId, rol);
         }
 
-        // Lista los roles de un usuario
-        public List<Rol> ObtenerRolesPorUsuario(Guid usuarioId)
+        // listar roles de un usuario
+        public List<Rol> ObtenerRolesPorUsuario(int usuarioId)
         {
             var usuario = _usuarioRepository.ObtenerPorId(usuarioId);
             if (usuario == null)
@@ -62,5 +62,4 @@ namespace sentirsebien_backend.Domain.Services
             return _rolRepository.ObtenerRolPorNombre(tipoRol.ToString());
         }
     }
-
 }

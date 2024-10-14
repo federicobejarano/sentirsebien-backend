@@ -44,5 +44,4 @@ namespace sentirsebien_backend.DataAccess.DbContexts
                 .HasForeignKey(rp => rp.ID_Permiso);
         }
     }
-
 }

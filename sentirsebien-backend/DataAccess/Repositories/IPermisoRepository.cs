@@ -4,13 +4,12 @@ namespace sentirsebien_backend.DataAccess.Repositories
 {
     public interface IPermisoRepository
     {
-        Permiso ObtenerPermisoPorId(Guid id);
-        void CrearPermiso(Permiso permiso);
-        void ActualizarPermiso(Permiso permiso);
-        void EliminarPermiso(Guid id);
-        List<Permiso> ObtenerPermisosPorRol(Guid rolId);
-        List<Permiso> ObtenerPermisosPorUsuario(Guid usuarioId); // <-- usado en GestorRolesService
+        sentirsebien_backend.Domain.Entities.Permiso ObtenerPermisoPorId(int id);
+        void CrearPermiso(sentirsebien_backend.Domain.Entities.Permiso permiso);
+        void ActualizarPermiso(sentirsebien_backend.Domain.Entities.Permiso permiso);
+        void EliminarPermiso(int id);
+        List<sentirsebien_backend.Domain.Entities.Permiso> ObtenerPermisosPorRol(int rolId);
+        List<sentirsebien_backend.Domain.Entities.Permiso> ObtenerPermisosPorUsuario(int usuarioId);
     }
-
-
 }
+

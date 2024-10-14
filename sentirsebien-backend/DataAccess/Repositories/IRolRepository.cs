@@ -15,5 +15,6 @@ namespace sentirsebien_backend.DataAccess.Repositories
         // asignación y eliminación de roles de usuario
         void AsignarRolAUsuario(int usuarioId, Rol rol);
         void EliminarRolDeUsuario(int usuarioId, Rol rol);
+        List<Permiso> ObtenerPermisosPorRol(int rolId);
     }
 }
