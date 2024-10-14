@@ -1,4 +1,5 @@
 ﻿using sentirsebien_backend.DataAccess.Models;
+using sentirsebien_backend.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Reflection.Emit;
@@ -7,11 +8,11 @@ namespace sentirsebien_backend.DataAccess.DbContexts
 {
     public class ApplicationDbContext : DbContext
     {
-        public DbSet<Usuario> Usuarios { get; set; }
-        public DbSet<Cliente> Clientes { get; set; }
-        public DbSet<Personal> Personales { get; set; }
-        public DbSet<Rol> Roles { get; set; }
-        public DbSet<Permiso> Permisos { get; set; }
+        public DbSet<sentirsebien_backend.Domain.Entities.Usuario> Usuarios { get; set; }
+        public DbSet<sentirsebien_backend.Domain.Entities.Cliente> Clientes { get; set; }
+        public DbSet<sentirsebien_backend.Domain.Entities.Personal> Personales { get; set; }
+        public DbSet<sentirsebien_backend.Domain.Entities.Rol> Roles { get; set; }
+        public DbSet<sentirsebien_backend.Domain.Entities.Permiso> Permisos { get; set; }
         public DbSet<UsuarioRol> UsuarioRoles { get; set; }
         public DbSet<RolPermiso> RolPermisos { get; set; }
 

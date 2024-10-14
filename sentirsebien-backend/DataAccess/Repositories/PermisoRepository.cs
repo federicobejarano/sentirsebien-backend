@@ -14,27 +14,26 @@ namespace sentirsebien_backend.DataAccess.Repositories
             _rolRepository = rolRepository;
         }
 
-        // Desambiguar el tipo de retorno usando el namespace completo.
-        public sentirsebien_backend.DataAccess.Models.Permiso ObtenerPermisoPorId(int id)
+        public sentirsebien_backend.Domain.Entities.Permiso ObtenerPermisoPorNombre(string nombre)
         {
-            return _context.Permisos.FirstOrDefault(p => p.IdPermiso == id);
+            return _context.Permisos.FirstOrDefault(p => p.Nombre == nombre);
         }
 
-        public void CrearPermiso(sentirsebien_backend.DataAccess.Models.Permiso permiso)
+        public void CrearPermiso(sentirsebien_backend.Domain.Entities.Permiso permiso)
         {
             _context.Permisos.Add(permiso);
             _context.SaveChanges();
         }
 
-        public void ActualizarPermiso(sentirsebien_backend.DataAccess.Models.Permiso permiso)
+        public void ActualizarPermiso(sentirsebien_backend.Domain.Entities.Permiso permiso)
         {
             _context.Permisos.Update(permiso);
             _context.SaveChanges();
         }
 
-        public void EliminarPermiso(int id)
+        public void EliminarPermiso(string nombre)
         {
-            var permiso = ObtenerPermisoPorId(id);
+            var permiso = ObtenerPermisoPorNombre(nombre);
             if (permiso != null)
             {
                 _context.Permisos.Remove(permiso);
@@ -42,7 +41,7 @@ namespace sentirsebien_backend.DataAccess.Repositories
             }
         }
 
-        // Obtener permisos por Rol, asegurando que el tipo coincida.
+        // obtener permisos por Rol, asegurando que el tipo coincida.
         public List<sentirsebien_backend.Domain.Entities.Permiso> ObtenerPermisosPorRol(int rolId)
         {
             var rol = _rolRepository.ObtenerRolPorId(rolId);
