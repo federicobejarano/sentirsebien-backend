@@ -5,14 +5,50 @@
     using System.Security.Claims;
     using System.Text;
     using Microsoft.IdentityModel.Tokens;
+    using sentirsebien_backend.DataAccess.Repositories;
 
     public class AutenticacionService : IAutenticacionService
     {
         private readonly string claveSecreta;
+        private readonly IUsuarioRepository _usuarioRepository;
+        private readonly IPasswordService _passwordService;
 
-        public AutenticacionService(string claveSecreta)
+        public AutenticacionService(string claveSecreta, IUsuarioRepository usuarioRepository, IPasswordService passwordService)
         {
             this.claveSecreta = claveSecreta;
+            this._usuarioRepository = usuarioRepository;
+            this._passwordService = passwordService;
+        }
+
+        public bool RegistrarUsuario(string username, string email, string password)
+        {
+            // verificar si el usuario o el correo electrónico ya existen en la base de datos
+            if (_usuarioRepository.ObtenerPorNombreUsuario(username) != null || _usuarioRepository.ObtenerPorEmail(email) != null)
+            {
+                return false; // Usuario o email ya registrados
+            }
+
+            // hashear la contraseña
+            string hashedPassword = _passwordService.HashPassword(password);
+
+            // crear un conjunto de roles para el nuevo usuario (puedes modificarlo según tu lógica)
+            var roles = new HashSet<TipoRol>(); 
+
+
+            // crear el nuevo usuario
+            var nuevoUsuario = new sentirsebien_backend.Domain.Entities.Usuario(
+                id: 0, // ID se asignará en la base de datos (o puedes gestionar manualmente si lo prefieres)
+                nombre: username,
+                email: email,
+                contraseña: password,
+                passwordService: _passwordService,
+                roles: roles
+            );
+
+            // guardar el usuario en la base de datos
+            _usuarioRepository.Agregar(nuevoUsuario);
+
+            return true; // Usuario registrado con éxito
         }
 
         // autenticar al usuario mediante username y password

@@ -50,6 +50,21 @@ namespace sentirsebien_backend.DataAccess.Repositories
             return _mapper.Map<sentirsebien_backend.Domain.Entities.Usuario>(usuarioDb);
         }
 
+        // Obtener usuario por nombre de usuario
+        public sentirsebien_backend.Domain.Entities.Usuario ObtenerPorEmail(string email)
+        {
+            var usuarioDb = _context.Usuarios
+                .Include(u => u.Roles) // incluir roles relacionados
+                .FirstOrDefault(u => u.Email == email);
+
+            if (usuarioDb == null)
+            {
+                return null;
+            }
+
+            return _mapper.Map<sentirsebien_backend.Domain.Entities.Usuario>(usuarioDb);
+        }
+
         // obtener todos los usuarios
         public IEnumerable<sentirsebien_backend.Domain.Entities.Usuario> ObtenerTodos()
         {
