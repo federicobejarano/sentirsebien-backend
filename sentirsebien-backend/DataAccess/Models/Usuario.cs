@@ -13,5 +13,4 @@
         // relación N:M con Rol a través de Usuario_Rol
         public virtual ICollection<UsuarioRol> Roles { get; set; }
     }
-
 }
