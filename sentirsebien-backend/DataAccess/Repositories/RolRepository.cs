@@ -29,14 +29,14 @@ namespace sentirsebien_backend.DataAccess.Repositories
 
         public sentirsebien_backend.Domain.Entities.Rol ObtenerRolPorNombre(string nombre)
         {
-            var rol = _context.Roles.FirstOrDefault(r => r.Nombre == nombre);
+            var rol = _context.Roles.FirstOrDefault(r => r.NombreRol == nombre);
             return _mapper.Map<sentirsebien_backend.Domain.Entities.Rol>(rol);
         }
 
         public void CrearRol(sentirsebien_backend.Domain.Entities.Rol rol)
         {
-            var rolModel = _mapper.Map<sentirsebien_backend.DataAccess.Models.Rol>(rol);
-            _context.Roles.Add(rolModel);
+            var rolEntidad = _mapper.Map<sentirsebien_backend.Domain.Entities.Rol>(rol);
+            _context.Roles.Add(rolEntidad);
             _context.SaveChanges();
         }
 
@@ -71,8 +71,8 @@ namespace sentirsebien_backend.DataAccess.Repositories
         {
             var usuario = _context.Usuarios
                 .Include(u => u.Roles)
-                .ThenInclude(ur => ur.Rol)
-                .FirstOrDefault(u => u.ID == usuarioId);
+                .ThenInclude(ur => ur.Rol) // revisar
+                .FirstOrDefault(u => u.Id == usuarioId);
 
             return _mapper.Map<List<sentirsebien_backend.Domain.Entities.Rol>>(usuario?.Roles.Select(ur => ur.Rol).ToList());
         }
