@@ -18,7 +18,6 @@ namespace sentirsebien_backend.API.Dtos
          * 
          */
 
-
         // Nombre del usuario, es obligatorio
         [Required(ErrorMessage = "El nombre es obligatorio.")]
         public string Nombre { get; set; }
