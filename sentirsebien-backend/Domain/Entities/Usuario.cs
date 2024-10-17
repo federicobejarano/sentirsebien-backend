@@ -16,6 +16,7 @@ namespace sentirsebien_backend.Domain.Entities
 
         private int id;
         private string nombre;
+        private string apellido;
         private string email;
         private string hashContraseña; // almacenar hash en lugar de contraseña
         private HashSet<TipoRol> roles;
@@ -26,10 +27,16 @@ namespace sentirsebien_backend.Domain.Entities
             set { id = value; }
         }
 
-        public string NombreCompleto
+        public string Nombre
         {
             get { return nombre; }
             set { nombre = value; }
+        }
+
+        public string Apellido
+        {
+            get { return apellido; }
+            set { apellido = value; }
         }
 
         public string Email
@@ -50,13 +57,12 @@ namespace sentirsebien_backend.Domain.Entities
             set { roles = value; }
         }
 
-        public Usuario(int id, string nombre, string email, string contraseña, IPasswordService passwordService, HashSet<TipoRol> roles)
+        public Usuario(string nombre, string apellido, string email, string hashContraseña, HashSet<TipoRol> roles)
         {
-            this.id = id;
             this.nombre = nombre;
             this.email = email;
             this.roles = roles;
-            this.hashContraseña = passwordService.HashPassword(contraseña); // hashear la contraseña antes de almacenarla
+            this.hashContraseña = hashContraseña;
         }
 
         // verificación de contraseña

@@ -13,7 +13,8 @@ namespace sentirsebien_backend.Domain.Mappings
             // mapping para Usuario
             CreateMap<sentirsebien_backend.Domain.Entities.Usuario, sentirsebien_backend.DataAccess.Models.Usuario>() // 
                 .ForMember(dest => dest.ID, opt => opt.MapFrom(src => src.Id))  // Id -> ID
-                .ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.NombreCompleto))  // NombreCompleto -> Nombre
+                .ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.Nombre))  // Nombre -> Nombre
+                .ForMember(dest => dest.Apellido, opt => opt.MapFrom(src => src.Apellido))  // Apellido -> Apellido
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))  // Email -> Email
                                                                                       // mapear otros campos que no están en la entidad, ejemplo: Telefono, Direccion.
                 .ForMember(dest => dest.Telefono, opt => opt.Ignore()) // ignorar, no presente en la entidad
@@ -26,7 +27,8 @@ namespace sentirsebien_backend.Domain.Mappings
 
             CreateMap<sentirsebien_backend.DataAccess.Models.Usuario, sentirsebien_backend.Domain.Entities.Usuario>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ID))  // ID -> Id
-                .ForMember(dest => dest.NombreCompleto, opt => opt.MapFrom(src => $"{src.Nombre}"))  // Nombre -> NombreCompleto
+                .ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => $"{src.Nombre}"))  // Nombre -> Nombre
+                .ForMember(dest => dest.Apellido, opt => opt.MapFrom(src => src.Apellido))  // Apellido -> Apellido
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))  // Email -> Email
                 .ForMember(dest => dest.Roles, opt => opt.MapFrom(src => src.Roles.Select(ur => (TipoRol)ur.ID_Rol))) // mapear desde UsuarioRol a HashSet<TipoRol>
                 .ForMember(dest => dest.Contraseña, opt => opt.Ignore()); // ignorar hashContraseña (no es parte del modelo de acceso a datos)

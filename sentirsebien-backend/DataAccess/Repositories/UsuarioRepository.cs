@@ -24,7 +24,7 @@ namespace sentirsebien_backend.DataAccess.Repositories
         {
             var usuarioDb = _context.Usuarios
                 .Include(u => u.Roles) // Incluir roles relacionados
-                .FirstOrDefault(u => u.ID == usuarioId);
+                .FirstOrDefault(u => u.Id == usuarioId);
 
             if (usuarioDb == null)
             {
