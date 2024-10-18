@@ -23,7 +23,7 @@ namespace sentirsebien_backend.Domain.Services
         // 1. validar si un usuario ya existe en la base de datos por su email
         public bool ValidarUsuarioExistente(string email)
         {
-            var usuarioExistente = _usuarioRepository.ObtenerPorEmail(email);
+            var usuarioExistente = _usuarioRepository.ValidarEmail(email);
             return usuarioExistente != null;
         }
 

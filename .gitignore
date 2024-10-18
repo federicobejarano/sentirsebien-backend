@@ -11,3 +11,19 @@ obj/
 
 # Others
 .DS_Store
+
+# Ignora el archivo appsettings.Development.json
+appsettings.Development.json
+
+# Ignora cualquier otro archivo appsettings que no sea el principal
+appsettings.*.json
+
+# Ignorar el archivo de usuario (si usas Rider/Visual Studio)
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Ignorar otras configuraciones locales
+.vscode/
+.idea/
