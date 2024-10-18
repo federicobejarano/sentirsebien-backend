@@ -29,7 +29,7 @@ public class RegistroUsuarioController : ControllerBase
         // lógica para verificar si el usuario ya existe (usando el servicio de registro).
         var result = await _registroUsuarioService.RegistrarUsuario(usuarioDTO);
 
-        if (!result.Success)
+        if (!result.IsSuccess)
         {
             return BadRequest(result.Message);  // mensaje de error personalizado
         }

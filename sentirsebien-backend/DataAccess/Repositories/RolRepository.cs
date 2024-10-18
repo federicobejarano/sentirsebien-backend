@@ -5,6 +5,7 @@ using sentirsebien_backend.DataAccess.Models;
 using sentirsebien_backend.Domain.Entities;
 using sentirsebien_backend.Domain.Services;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,19 +24,22 @@ namespace sentirsebien_backend.DataAccess.Repositories
 
         public sentirsebien_backend.Domain.Entities.Rol ObtenerRolPorId(int id)
         {
-            var rol = _context.Roles.Find(id);
+            var rol = _context.Roles.Find(id); // entre 1 y 5
             return _mapper.Map<sentirsebien_backend.Domain.Entities.Rol>(rol);
         }
 
-        public sentirsebien_backend.Domain.Entities.Rol ObtenerRolPorNombre(string nombre)
+
+        public async Task<sentirsebien_backend.Domain.Entities.Rol> GetByNombreAsync(string nombreRol)
         {
-            var rol = _context.Roles.FirstOrDefault(r => r.NombreRol == nombre);
+            var rol = await _context.Roles
+                .Include(r => r.Permisos) // Incluir la lista de permisos
+                .FirstOrDefaultAsync(r => r.Nombre == nombreRol); // Buscar por nombre
             return _mapper.Map<sentirsebien_backend.Domain.Entities.Rol>(rol);
         }
 
         public void CrearRol(sentirsebien_backend.Domain.Entities.Rol rol)
         {
-            var rolEntidad = _mapper.Map<sentirsebien_backend.Domain.Entities.Rol>(rol);
+            var rolEntidad = _mapper.Map<sentirsebien_backend.DataAccess.Models.Rol>(rol);
             _context.Roles.Add(rolEntidad);
             _context.SaveChanges();
         }
@@ -72,37 +76,9 @@ namespace sentirsebien_backend.DataAccess.Repositories
             var usuario = _context.Usuarios
                 .Include(u => u.Roles)
                 .ThenInclude(ur => ur.Rol) // revisar
-                .FirstOrDefault(u => u.Id == usuarioId);
+                .FirstOrDefault(u => u.ID == usuarioId);
 
             return _mapper.Map<List<sentirsebien_backend.Domain.Entities.Rol>>(usuario?.Roles.Select(ur => ur.Rol).ToList());
-        }
-
-        public void AsignarRolAUsuario(int usuarioId, sentirsebien_backend.Domain.Entities.Rol rol)
-        {
-            var usuario = _context.Usuarios.Include(u => u.Roles).FirstOrDefault(u => u.ID == usuarioId);
-            if (usuario != null)
-            {
-                var rolEntity = _context.Roles.FirstOrDefault(r => r.ID == rol.Id);
-                if (rolEntity != null && !usuario.Roles.Any(ur => ur.ID_Rol == rolEntity.ID))
-                {
-                    usuario.Roles.Add(new UsuarioRol { ID_Usuario = usuario.ID, ID_Rol = rolEntity.ID });
-                    _context.SaveChanges();
-                }
-            }
-        }
-
-        public void EliminarRolDeUsuario(int usuarioId, sentirsebien_backend.Domain.Entities.Rol rol)
-        {
-            var usuario = _context.Usuarios.Include(u => u.Roles).FirstOrDefault(u => u.ID == usuarioId);
-            if (usuario != null)
-            {
-                var rolAEliminar = usuario.Roles.FirstOrDefault(ur => ur.ID_Rol == rol.Id);
-                if (rolAEliminar != null)
-                {
-                    usuario.Roles.Remove(rolAEliminar);
-                    _context.SaveChanges();
-                }
-            }
         }
 
         // Obtener permisos por Rol, asegurando que el tipo coincida.
@@ -122,6 +98,7 @@ namespace sentirsebien_backend.DataAccess.Repositories
             throw new Exception("No se encontraron permisos para el rol especificado.");
         }
 
+        /*
         public List<sentirsebien_backend.DataAccess.Models.Permiso> ObtenerPermisosPorRol(int rolId)
         {
             return _context.RolPermisos
@@ -129,5 +106,6 @@ namespace sentirsebien_backend.DataAccess.Repositories
                 .Select(rp => rp.Permiso)
                 .ToList();
         }
+        */
     }
 }

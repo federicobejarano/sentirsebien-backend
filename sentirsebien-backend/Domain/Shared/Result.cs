@@ -16,5 +16,4 @@
             return new Result { IsSuccess = false, Message = message };
         }
     }
-
 }

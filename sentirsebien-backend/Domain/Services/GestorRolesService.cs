@@ -15,34 +15,26 @@ namespace sentirsebien_backend.Domain.Services
         }
 
         // asignar un rol a un usuario
-        public void AsignarRol(int usuarioId, TipoRol tipoRol)
+        public async Task AsignarRol(sentirsebien_backend.Domain.Entities.Usuario usuario, string nombreRol)
         {
-            var usuario = _usuarioRepository.ObtenerPorId(usuarioId);
-            if (usuario == null)
+            // Obtener el rol por su nombre de forma asíncrona
+            var rol = await _rolRepository.GetByNombreAsync(nombreRol);
+
+            if (rol == null)
             {
-                throw new Exception("Usuario no encontrado.");
+                throw new Exception($"El rol '{nombreRol}' no existe.");
             }
 
-            // convertir TipoRol (enum) a Rol (entidad)
-            var rol = ConvertirTipoRolAEntidadRol(tipoRol);
+            // Asignar el rol al usuario
+            usuario.AsignarRol(rol); // Asumiendo que tienes un método AsignarRol en la entidad Usuario
 
-            _rolRepository.AsignarRolAUsuario(usuarioId, rol);
+            // Aquí podrías hacer otras acciones, como guardar los cambios en el repositorio si es necesario.
         }
+
 
         // eliminar un rol de un usuario
-        public void EliminarRol(int usuarioId, TipoRol tipoRol)
-        {
-            var usuario = _usuarioRepository.ObtenerPorId(usuarioId);
-            if (usuario == null)
-            {
-                throw new Exception("Usuario no encontrado.");
-            }
 
-            // Convertir TipoRol (enum) a Rol (entidad)
-            var rol = ConvertirTipoRolAEntidadRol(tipoRol);
-
-            _rolRepository.EliminarRolDeUsuario(usuarioId, rol);
-        }
+        // public void EliminarRol(int usuarioId, TipoRol tipoRol)
 
         // listar roles de un usuario
         public List<Rol> ObtenerRolesPorUsuario(int usuarioId)
@@ -54,12 +46,6 @@ namespace sentirsebien_backend.Domain.Services
             }
 
             return _rolRepository.ObtenerRolesPorUsuario(usuarioId);
-        }
-
-        // convertir un TipoRol (enum) a Rol (entidad)
-        private Rol ConvertirTipoRolAEntidadRol(TipoRol tipoRol)
-        {
-            return _rolRepository.ObtenerRolPorNombre(tipoRol.ToString());
         }
     }
 }

@@ -8,11 +8,11 @@ namespace sentirsebien_backend.DataAccess.DbContexts
 {
     public class ApplicationDbContext : DbContext
     {
-        public DbSet<sentirsebien_backend.Domain.Entities.Usuario> Usuarios { get; set; }
-        public DbSet<sentirsebien_backend.Domain.Entities.Cliente> Clientes { get; set; }
-        public DbSet<sentirsebien_backend.Domain.Entities.Personal> Personales { get; set; }
-        public DbSet<sentirsebien_backend.Domain.Entities.Rol> Roles { get; set; }
-        public DbSet<sentirsebien_backend.Domain.Entities.Permiso> Permisos { get; set; }
+        public DbSet<sentirsebien_backend.DataAccess.Models.Usuario> Usuarios { get; set; }
+        public DbSet<sentirsebien_backend.DataAccess.Models.Cliente> Clientes { get; set; }
+        public DbSet<sentirsebien_backend.DataAccess.Models.Personal> Personales { get; set; }
+        public DbSet<sentirsebien_backend.DataAccess.Models.Rol> Roles { get; set; }
+        public DbSet<sentirsebien_backend.DataAccess.Models.Permiso> Permisos { get; set; }
         public DbSet<UsuarioRol> UsuarioRoles { get; set; }
         public DbSet<RolPermiso> RolPermisos { get; set; }
 

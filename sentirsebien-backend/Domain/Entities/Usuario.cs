@@ -19,7 +19,7 @@ namespace sentirsebien_backend.Domain.Entities
         private string apellido;
         private string email;
         private string hashContraseña; // almacenar hash en lugar de contraseña
-        private HashSet<TipoRol> roles;
+        private HashSet<sentirsebien_backend.Domain.Entities.Rol> roles;
 
         public int Id
         {
@@ -51,18 +51,19 @@ namespace sentirsebien_backend.Domain.Entities
             set { hashContraseña = value; }
         }
 
-        public HashSet<TipoRol> Roles
+        public HashSet<sentirsebien_backend.Domain.Entities.Rol> Roles
         {
             get { return roles; }
             set { roles = value; }
         }
 
-        public Usuario(string nombre, string apellido, string email, string hashContraseña, HashSet<TipoRol> roles)
+        public Usuario (string nombre, string apellido, string email, string hashContraseña)
         {
             this.nombre = nombre;
             this.email = email;
-            this.roles = roles;
             this.hashContraseña = hashContraseña;
+            this.roles = new HashSet<sentirsebien_backend.Domain.Entities.Rol>();
+
         }
 
         // verificación de contraseña
@@ -82,9 +83,9 @@ namespace sentirsebien_backend.Domain.Entities
             return $"Usuario: {nombre} (Email: {email})";
         }
 
-        public bool TieneRol(TipoRol rol)
+        public void AsignarRol(sentirsebien_backend.Domain.Entities.Rol nuevoRol)
         {
-            return roles.Contains(rol);
+            roles.Add(nuevoRol);
         }
     }
 }
