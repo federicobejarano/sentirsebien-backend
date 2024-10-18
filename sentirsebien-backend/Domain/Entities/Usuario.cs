@@ -62,8 +62,7 @@ namespace sentirsebien_backend.Domain.Entities
             this.nombre = nombre;
             this.email = email;
             this.hashContraseña = hashContraseña;
-            this.roles = new HashSet<sentirsebien_backend.Domain.Entities.Rol>();
-
+            this.roles = new HashSet<sentirsebien_backend.Domain.Entities.Rol>(); // colección vacía
         }
 
         // verificación de contraseña

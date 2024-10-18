@@ -1,61 +1,69 @@
-﻿using sentirsebien_backend.DataAccess.Repositories;
+﻿using sentirsebien_backend.API.Dtos;
+using sentirsebien_backend.DataAccess.Repositories;
+using sentirsebien_backend.Domain.Shared;
 
 namespace sentirsebien_backend.Domain.Services
 {
-    public class RegistroUsuarioService
+    public class RegistroUsuarioService : IRegistroUsuarioService
     {
         private readonly IUsuarioRepository _usuarioRepository;
-        private readonly IAutenticacionService _autenticacionService;
-        private readonly IAutorizacionService _autorizacionService;
-        private readonly IGestorRolesService _gestorRolesService;
-        private readonly PasswordService _passwordService;
+        private readonly IPasswordService _passwordService;
+        private readonly IRolRepository _rolRepository;
 
-        // constructor con inyección de dependencias
         public RegistroUsuarioService(
             IUsuarioRepository usuarioRepository,
-            IAutenticacionService autenticacionService,
-            IAutorizacionService autorizacionService,
-            IGestorRolesService gestorRolesService,
-            PasswordService passwordService)
+            IPasswordService passwordService,
+            IRolRepository rolRepository)
         {
             _usuarioRepository = usuarioRepository;
-            _autenticacionService = autenticacionService;
-            _autorizacionService = autorizacionService;
-            _gestorRolesService = gestorRolesService;
             _passwordService = passwordService;
+            _rolRepository = rolRepository;
         }
 
-        // método para registrar un nuevo usuario
-        public void RegistrarUsuario(RegistroUsuarioDTO dto)
+        // 1. validar si un usuario ya existe en la base de datos por su email
+        public bool ValidarUsuarioExistente(string email)
         {
-            // 1. validar que el email no esté registrado
-            var usuarioExistente = _usuarioRepository.ObtenerPorEmail(dto.Email);
-            if (usuarioExistente != null)
-            {
-                throw new Exception("El email ya está registrado.");
-            }
+            var usuarioExistente = _usuarioRepository.ObtenerPorEmail(email);
+            return usuarioExistente != null;
+        }
 
-            // 2. validar que el nombre de usuario no esté registrado
-            var nombreUsuarioExistente = _usuarioRepository.ObtenerPorNombreUsuario(dto.NombreUsuario);
-            if (nombreUsuarioExistente != null)
-            {
-                throw new Exception("El nombre de usuario ya está en uso.");
-            }
+        // 2. crear una instancia de la entidad Usuario a partir del DTO
+        public sentirsebien_backend.Domain.Entities.Usuario CrearUsuario(RegistroUsuarioDTO dto)
+        {
+            // hashear la contraseña
+            var hashContraseña = _passwordService.HashPassword(dto.Contraseña);
 
-            // 3. crear una nueva instancia del usuario
-            var nuevoUsuario = new Usuario(
-                dto.NombreUsuario,
+            // crear una nueva instancia de Usuario con el DTO proporcionado
+            return new sentirsebien_backend.Domain.Entities.Usuario(
+                dto.Nombre,
+                dto.Apellido,
                 dto.Email,
-                _passwordService.HashPassword(dto.Contrasena)
+                hashContraseña
             );
+        }
 
-            // 4. asignar el rol de "Cliente" por defecto
-            var rolCliente = _gestorRolesService.ObtenerRolPorTipo(TipoRol.Cliente);
-            _gestorRolesService.AsignarRol(nuevoUsuario, rolCliente);
+        // 3. manejar todo el proceso de registro de usuario
+        public async Task<Result> RegistrarUsuario(RegistroUsuarioDTO dto)
+        {
+            // validar si el usuario ya existe
+            if (ValidarUsuarioExistente(dto.Email))
+            {
+                return Result.Failure("El usuario ya está registrado.");
+            }
 
-            // 5. guardar el nuevo usuario en el repositorio
+            // crear nueva instancia de Usuario
+            var nuevoUsuario = CrearUsuario(dto);
+
+            // obtener rol por defecto ("Cliente")
+            var rolCliente = await _rolRepository.GetByNombreAsync("Cliente");
+
+            // asignar el rol al nuevo usuario
+            nuevoUsuario.AsignarRol(rolCliente);
+
+            // persistir el nuevo usuario en la base de datos
             _usuarioRepository.Agregar(nuevoUsuario);
+
+            return Result.Success();
         }
     }
-
 }

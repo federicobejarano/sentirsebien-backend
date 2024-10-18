@@ -2,7 +2,7 @@
 {
     public class Usuario
     {
-        public int ID { get; set; }  // PK
+        public int Id { get; set; }  // PK
         public string Nombre { get; set; }  // VARCHAR(100)
         public string Apellido { get; set; }  // VARCHAR(100)
         public string Email { get; set; }  // VARCHAR(255)
