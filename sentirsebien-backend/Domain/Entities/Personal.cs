@@ -9,8 +9,8 @@
             get { return roles; }
         }
 
-        public Personal(int id, string nombre, string email, string contraseña)
-            : base(id, nombre, email, contraseña)
+        public Personal(string nombre, string apellido, string email, string contraseña)
+            : base(nombre, apellido, email, contraseña)
         {
             roles = new List<Rol>();
         }

@@ -76,7 +76,7 @@ namespace sentirsebien_backend.DataAccess.Repositories
             var usuario = _context.Usuarios
                 .Include(u => u.Roles)
                 .ThenInclude(ur => ur.Rol) // revisar
-                .FirstOrDefault(u => u.ID == usuarioId);
+                .FirstOrDefault(u => u.Id == usuarioId);
 
             return _mapper.Map<List<sentirsebien_backend.Domain.Entities.Rol>>(usuario?.Roles.Select(ur => ur.Rol).ToList());
         }

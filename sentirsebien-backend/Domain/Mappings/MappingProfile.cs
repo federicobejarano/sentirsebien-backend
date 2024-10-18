@@ -12,7 +12,7 @@ namespace sentirsebien_backend.Domain.Mappings
         {
             // mapping para Usuario
             CreateMap<sentirsebien_backend.Domain.Entities.Usuario, sentirsebien_backend.DataAccess.Models.Usuario>() // 
-                .ForMember(dest => dest.ID, opt => opt.MapFrom(src => src.Id))  // Id -> ID
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))  // Id -> ID
                 .ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.Nombre))  // Nombre -> Nombre
                 .ForMember(dest => dest.Apellido, opt => opt.MapFrom(src => src.Apellido))  // Apellido -> Apellido
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))  // Email -> Email
@@ -21,12 +21,11 @@ namespace sentirsebien_backend.Domain.Mappings
                 .ForMember(dest => dest.Direccion, opt => opt.Ignore()) // ignorar, no presente en la entidad
                 .ForMember(dest => dest.Roles, opt => opt.MapFrom(src => src.Roles.Select(rol => new UsuarioRol
                 {
-                    ID_Rol = (int)rol, // mapea de TipoRol al modelo
-                                       // otras propiedades de UsuarioRol pueden ser mapeadas acá si es necesario
+                    /// mapear rol
                 })));
 
             CreateMap<sentirsebien_backend.DataAccess.Models.Usuario, sentirsebien_backend.Domain.Entities.Usuario>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ID))  // ID -> Id
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))  // ID -> Id
                 .ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => $"{src.Nombre}"))  // Nombre -> Nombre
                 .ForMember(dest => dest.Apellido, opt => opt.MapFrom(src => src.Apellido))  // Apellido -> Apellido
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))  // Email -> Email
