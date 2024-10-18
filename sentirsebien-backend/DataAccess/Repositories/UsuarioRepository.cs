@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using sentirsebien_backend.DataAccess.DbContexts;
 using sentirsebien_backend.DataAccess.Models; // para referenciar el modelo de acceso a datos
 using sentirsebien_backend.Domain.Entities;   // para referenciar la entidad de dominio
+using sentirsebien_backend.Domain.Shared;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -35,7 +36,7 @@ namespace sentirsebien_backend.DataAccess.Repositories
             return _mapper.Map<sentirsebien_backend.Domain.Entities.Usuario>(usuarioDb);
         }
 
-        // Obtener usuario por nombre de usuario
+        // obtener usuario por nombre de usuario
         public sentirsebien_backend.Domain.Entities.Usuario ObtenerPorNombreUsuario(string nombreUsuario)
         {
             var usuarioDb = _context.Usuarios
@@ -50,7 +51,7 @@ namespace sentirsebien_backend.DataAccess.Repositories
             return _mapper.Map<sentirsebien_backend.Domain.Entities.Usuario>(usuarioDb);
         }
 
-        // Obtener usuario por nombre de usuario
+        // obtener usuario por nombre de usuario
         public sentirsebien_backend.Domain.Entities.Usuario ObtenerPorEmail(string email)
         {
             var usuarioDb = _context.Usuarios
@@ -77,17 +78,27 @@ namespace sentirsebien_backend.DataAccess.Repositories
         }
 
         // agregar un nuevo usuario
-        public void Agregar(sentirsebien_backend.Domain.Entities.Usuario usuario)
+        public Result Agregar(sentirsebien_backend.Domain.Entities.Usuario usuario)
         {
-            // mapear la entidad de dominio Usuario a la entidad de la base de datos
-            var usuarioDb = _mapper.Map<sentirsebien_backend.DataAccess.Models.Usuario>(usuario);
+            try
+            {
+                // mapear entidad de dominio Usuario a entidad de BD
+                var usuarioDb = _mapper.Map<sentirsebien_backend.DataAccess.Models.Usuario>(usuario);
 
-            // agregar y guardar cambios en la base de datos
-            _context.Usuarios.Add(usuarioDb);
-            _context.SaveChanges();
+                // Agregar y guardar cambios en la base de datos
+                _context.Usuarios.Add(usuarioDb);
+                _context.SaveChanges();
+                return Result.Success("Usuario agregado exitosamente.");
+            }
+            catch (Exception ex)
+            {
+                // manejar error (acá se puede hacer logging de ser necesario)
+                return Result.Failure("Error al agregar el usuario.");
+            }
         }
 
-        // Actualizar un usuario existente
+
+        // actualizar un usuario existente
         public void Actualizar(sentirsebien_backend.Domain.Entities.Usuario usuario)
         {
             var usuarioExistente = _context.Usuarios.Find(usuario.Id);

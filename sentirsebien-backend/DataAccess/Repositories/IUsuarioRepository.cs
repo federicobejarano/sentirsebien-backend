@@ -1,4 +1,5 @@
 ﻿using sentirsebien_backend.Domain.Entities;
+using sentirsebien_backend.Domain.Shared;
 
 namespace sentirsebien_backend.DataAccess.Repositories
 {
@@ -8,7 +9,7 @@ namespace sentirsebien_backend.DataAccess.Repositories
         sentirsebien_backend.Domain.Entities.Usuario ObtenerPorEmail(string email);
         sentirsebien_backend.Domain.Entities.Usuario ObtenerPorNombreUsuario(string nombreUsuario);
         IEnumerable<Usuario> ObtenerTodos();
-        void Agregar(Usuario usuario);
+        Result Agregar(sentirsebien_backend.Domain.Entities.Usuario usuario);
         void Actualizar(Usuario usuario);
         void Eliminar(int id);
     }
