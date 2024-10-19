@@ -3,6 +3,27 @@ using sentirsebien_backend.API.Dtos;
 using sentirsebien_backend.Domain.Services;
 using System.Threading.Tasks;
 
+/*
+    PARA TESTEAR LA API CON POSTMAN
+
+    * Solicitud:
+    
+        POST http://localhost:[número de servidor]/api/usuarios/registro
+
+    * Cuerpo:
+
+        {
+          "Nombre": "Juan",
+          "Apellido": "Pérez",
+          "Email": "juan.perez@example.com",
+          "Telefono": "123456789",
+          "Direccion": "Calle Falsa 123",
+          "Contraseña": "password123"
+        }
+
+ * 
+ */
+
 [ApiController]
 [Route("api/usuarios")]
 public class RegistroUsuarioController : ControllerBase
