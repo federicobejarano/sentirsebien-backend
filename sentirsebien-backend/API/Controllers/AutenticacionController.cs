@@ -17,22 +17,22 @@ public class AutenticacionController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] AutenticacionDTO dto)
     {
-        // Validación del modelo
+        // validar modelo
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        // Intentar autenticar al usuario
-        bool esAutenticado = await _autenticacionService.AutenticarUsuario(dto.Email, dto.Contraseña); // error: `CS1061: bool no contiene una definición para GetAwaiter`
+        // autenticar al usuario
+        bool esAutenticado = await _autenticacionService.AutenticarUsuario(dto.Email, dto.Contraseña);
 
         if (!esAutenticado)
         {
             return Unauthorized("Credenciales incorrectas.");
         }
 
-        // Generar y devolver token (suponiendo que la generación de token sea parte del servicio)
-        var token = await _autenticacionService.GenerarToken(dto.Email); // error: `bool no contiene una definición para GetAwaiter`
+        // generar y devolver token
+        var token = await _autenticacionService.GenerarToken(dto.Email);
         return Ok(new { Token = token });
     }
 }
