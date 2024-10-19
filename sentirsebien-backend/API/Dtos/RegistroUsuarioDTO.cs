@@ -5,9 +5,6 @@ namespace sentirsebien_backend.API.Dtos
     public class RegistroUsuarioDTO
     {
         /* 
-         * Usamos el espacio de nombres System.ComponentModel.DataAnnotations
-         * para realizar las validaciones sobre cada propiedad. Esto garantiza
-         * que se validen antes de que los datos sean procesados más adelante.
          * 
          * Propiedades como Nombre, Apellido, Email, Telefono y Contraseña son
          * requeridas, mientras que Direccion es opcional.
