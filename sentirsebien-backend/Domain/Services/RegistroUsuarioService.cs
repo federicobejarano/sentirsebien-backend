@@ -24,7 +24,7 @@ namespace sentirsebien_backend.Domain.Services
         public bool ValidarUsuarioExistente(string email)
         {
             var usuarioExistente = _usuarioRepository.ValidarEmail(email);
-            return usuarioExistente != null;
+            return usuarioExistente == null;
         }
 
         // 2. crear una instancia de la entidad Usuario a partir del DTO

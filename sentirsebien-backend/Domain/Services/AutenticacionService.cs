@@ -47,10 +47,10 @@ namespace sentirsebien_backend.Application.Services
             return token; // Si la autenticación es exitosa, retornar el token generado
         }
 
-        // generar un token (puede ser utilizado si se requiere en otro contexto)
+        // generar token (puede ser utilizado si se requiere en otro contexto)
         public async Task<string> GenerarToken(string username)
         {
-            // Llamar al servicio de tokens para generar un nuevo token JWT
+            // generar nuevo token JWT
             return await _tokenService.GenerarTokenAsync(username);
         }
 

@@ -1,7 +1,10 @@
-﻿namespace sentirsebien_backend.DataAccess.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace sentirsebien_backend.DataAccess.Models
 {
     public class Permiso
     {
+        [Key]
         public int IdPermiso { get; set; }  // PK
         public string Codigo { get; set; }  // VARCHAR(10)
         public string TipoPermiso { get; set; }  // VARCHAR(50)

@@ -46,6 +46,13 @@ builder.Logging.AddConsole();
 
 var app = builder.Build();
 
+app.Use(async (context, next) =>
+{
+    Console.WriteLine($"Request: {context.Request.Method} {context.Request.Path}");
+    await next.Invoke();
+});
+
+
 // aplicar política de CORS
 app.UseCors("PermitirTodo");
 

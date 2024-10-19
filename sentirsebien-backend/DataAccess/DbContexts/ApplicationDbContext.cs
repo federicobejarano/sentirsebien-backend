@@ -24,6 +24,9 @@ namespace sentirsebien_backend.DataAccess.DbContexts
             modelBuilder.Entity<UsuarioRol>().HasKey(ur => new { ur.ID_Usuario, ur.ID_Rol });
             modelBuilder.Entity<RolPermiso>().HasKey(rp => rp.IdRolPermiso);
 
+            modelBuilder.Entity<sentirsebien_backend.DataAccess.Models.Permiso>()
+                .HasKey(p => p.IdPermiso);
+
             // relación N:M entre Usuario y Rol
             modelBuilder.Entity<UsuarioRol>()
                 .HasOne(ur => ur.Usuario)
