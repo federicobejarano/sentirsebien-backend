@@ -85,6 +85,8 @@ namespace sentirsebien_backend.DataAccess.Repositories
                 // mapear entidad de dominio Usuario a entidad de BD
                 var usuarioDb = _mapper.Map<sentirsebien_backend.DataAccess.Models.Usuario>(usuario);
 
+                usuarioDb.EsCliente = true;
+
                 // Agregar y guardar cambios en la base de datos
                 _context.Usuarios.Add(usuarioDb);
                 _context.SaveChanges();
