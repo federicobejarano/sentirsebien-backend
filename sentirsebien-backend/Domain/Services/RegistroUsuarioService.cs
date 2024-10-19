@@ -61,7 +61,7 @@ namespace sentirsebien_backend.Domain.Services
             nuevoUsuario.AsignarRol(rolCliente);
 
             // persistir el nuevo usuario en la base de datos
-            _usuarioRepository.Agregar(nuevoUsuario);
+            await _usuarioRepository.AgregarAsync(nuevoUsuario);
 
             return Result.Success();
         }
