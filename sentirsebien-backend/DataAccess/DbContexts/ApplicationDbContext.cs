@@ -16,6 +16,8 @@ namespace sentirsebien_backend.DataAccess.DbContexts
         public DbSet<UsuarioRol> UsuarioRoles { get; set; }
         public DbSet<RolPermiso> RolPermisos { get; set; }
 
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // configurar claves compuestas para tablas intermedias
