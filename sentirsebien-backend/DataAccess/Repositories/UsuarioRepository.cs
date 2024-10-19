@@ -21,11 +21,11 @@ namespace sentirsebien_backend.DataAccess.Repositories
         }
 
         // obtener usuario por ID (int)
-        public sentirsebien_backend.Domain.Entities.Usuario ObtenerPorId(int usuarioId)
+        public async Task<sentirsebien_backend.Domain.Entities.Usuario> ObtenerPorIdAsync(int usuarioId)
         {
-            var usuarioDb = _context.Usuarios
+            var usuarioDb = await _context.Usuarios
                 .Include(u => u.Roles) // incluir roles relacionados
-                .FirstOrDefault(u => u.Id == usuarioId);
+                .FirstOrDefaultAsync(u => u.Id == usuarioId);
 
             if (usuarioDb == null)
             {
@@ -37,11 +37,11 @@ namespace sentirsebien_backend.DataAccess.Repositories
         }
 
         // btener usuario por nombre de usuario
-        public sentirsebien_backend.Domain.Entities.Usuario ObtenerPorNombreUsuario(string nombreUsuario)
+        public async Task<sentirsebien_backend.Domain.Entities.Usuario> ObtenerPorNombreUsuarioAsync(string nombreUsuario)
         {
-            var usuarioDb = _context.Usuarios
+            var usuarioDb = await _context.Usuarios
                 .Include(u => u.Roles) // incluir roles relacionados
-                .FirstOrDefault(u => u.Nombre == nombreUsuario);
+                .FirstOrDefaultAsync(u => u.Nombre == nombreUsuario);
 
             if (usuarioDb == null)
             {
@@ -69,18 +69,17 @@ namespace sentirsebien_backend.DataAccess.Repositories
         }
 
         // obtener todos los usuarios
-        public IEnumerable<sentirsebien_backend.Domain.Entities.Usuario> ObtenerTodos()
+        public async Task<IEnumerable<sentirsebien_backend.Domain.Entities.Usuario>> ObtenerTodosAsync()
         {
-            var usuariosDb = _context.Usuarios
+            var usuariosDb = await _context.Usuarios
                 .Include(u => u.Roles) // incluir roles relacionados
-                .ToList();
+                .ToListAsync();
 
-            // mapear lista de entidades de acceso a datos a la capa de dominio
             return _mapper.Map<IEnumerable<sentirsebien_backend.Domain.Entities.Usuario>>(usuariosDb);
         }
 
         // agregar un nuevo usuario
-        public Result Agregar(sentirsebien_backend.Domain.Entities.Usuario usuario)
+        public async Task<Result> AgregarAsync(sentirsebien_backend.Domain.Entities.Usuario usuario)
         {
             try
             {
@@ -89,9 +88,9 @@ namespace sentirsebien_backend.DataAccess.Repositories
 
                 usuarioDb.EsCliente = true;
 
-                // Agregar y guardar cambios en la base de datos
-                _context.Usuarios.Add(usuarioDb);
-                _context.SaveChanges();
+                // Agregar y guardar cambios en la base de datos de manera asíncrona
+                await _context.Usuarios.AddAsync(usuarioDb);
+                await _context.SaveChangesAsync();
                 return Result.Success("Usuario agregado exitosamente.");
             }
             catch (Exception ex)
@@ -103,39 +102,36 @@ namespace sentirsebien_backend.DataAccess.Repositories
 
 
         // actualizar un usuario existente
-        public void Actualizar(sentirsebien_backend.Domain.Entities.Usuario usuario)
+        public async Task ActualizarAsync(sentirsebien_backend.Domain.Entities.Usuario usuario)
         {
-            var usuarioExistente = _context.Usuarios.Find(usuario.Id);
+            var usuarioExistente = await _context.Usuarios.FindAsync(usuario.Id);
 
             if (usuarioExistente != null)
             {
                 // mapear los cambios desde la entidad de dominio a la entidad de datos
                 _mapper.Map(usuario, usuarioExistente);
 
-                // guardar los cambios en la base de datos
-                _context.SaveChanges();
+                // guardar los cambios en la base de datos de manera asíncrona
+                await _context.SaveChangesAsync();
             }
             else
             {
-                // manejar el caso en que el usuario no exista (retornar un error, excepción, etc.)
                 throw new KeyNotFoundException($"No se encontró el usuario con ID {usuario.Id}");
             }
         }
 
-        // eliminar un usuario por ID
-        public void Eliminar(int id)
+        // eliminar un usuario por ID - versión asíncrona
+        public async Task EliminarAsync(int id)
         {
-            var usuario = _context.Usuarios.Find(id);
+            var usuario = await _context.Usuarios.FindAsync(id);
 
             if (usuario != null)
             {
-                // remover el usuario y guardar cambios
                 _context.Usuarios.Remove(usuario);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
             else
             {
-                // manejar el caso en que el usuario no exista
                 throw new KeyNotFoundException($"No se encontró el usuario con ID {id}");
             }
         }

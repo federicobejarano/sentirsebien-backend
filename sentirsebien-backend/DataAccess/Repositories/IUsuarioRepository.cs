@@ -5,6 +5,7 @@ namespace sentirsebien_backend.DataAccess.Repositories
 {
     public interface IUsuarioRepository
     {
+        /*
         sentirsebien_backend.Domain.Entities.Usuario ObtenerPorId(int usuarioId);
 
         // sentirsebien_backend.Domain.Entities.Usuario ValidarEmail(string email); <- modificado
@@ -14,5 +15,21 @@ namespace sentirsebien_backend.DataAccess.Repositories
         Result Agregar(sentirsebien_backend.Domain.Entities.Usuario usuario);
         void Actualizar(Usuario usuario);
         void Eliminar(int id);
+
+        */
+
+        Task<sentirsebien_backend.Domain.Entities.Usuario> ObtenerPorIdAsync(int usuarioId);
+
+        Task<sentirsebien_backend.Domain.Entities.Usuario> ValidarEmail(string email);
+
+        Task<sentirsebien_backend.Domain.Entities.Usuario> ObtenerPorNombreUsuarioAsync(string nombreUsuario);
+
+        Task<IEnumerable<Usuario>> ObtenerTodosAsync();
+
+        Task<Result> AgregarAsync(sentirsebien_backend.Domain.Entities.Usuario usuario);
+
+        Task ActualizarAsync(Usuario usuario);
+
+        Task EliminarAsync(int id);
     }
 }
