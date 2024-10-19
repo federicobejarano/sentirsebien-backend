@@ -3,6 +3,23 @@ using sentirsebien_backend.API.Dtos;
 using sentirsebien_backend.Domain.Services;
 using System.Threading.Tasks;
 
+
+/*
+    PROBAR EN POSTMAN:
+
+    - solicitud:
+
+    POST http://localhost:[número de localhost]/api/autenticacion/login
+
+    - cuerpo:
+
+    {
+      "Email": "juan.perez.2@example.com",
+      "Contraseña": "password123"
+    }
+ 
+*/
+
 [ApiController]
 [Route("api/[controller]")]
 public class AutenticacionController : ControllerBase
