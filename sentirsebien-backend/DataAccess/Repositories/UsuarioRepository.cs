@@ -24,7 +24,7 @@ namespace sentirsebien_backend.DataAccess.Repositories
         public sentirsebien_backend.Domain.Entities.Usuario ObtenerPorId(int usuarioId)
         {
             var usuarioDb = _context.Usuarios
-                .Include(u => u.Roles) // Incluir roles relacionados
+                .Include(u => u.Roles) // incluir roles relacionados
                 .FirstOrDefault(u => u.Id == usuarioId);
 
             if (usuarioDb == null)
@@ -32,7 +32,7 @@ namespace sentirsebien_backend.DataAccess.Repositories
                 return null; // o lanzar una excepción si lo prefieres
             }
 
-            // Mapear la entidad de acceso a datos a la entidad de dominio
+            // mapear entidad de acceso a datos a la entidad de dominio
             return _mapper.Map<sentirsebien_backend.Domain.Entities.Usuario>(usuarioDb);
         }
 
@@ -52,17 +52,19 @@ namespace sentirsebien_backend.DataAccess.Repositories
         }
 
         // obtener usuario por nombre de usuario
-        public sentirsebien_backend.Domain.Entities.Usuario ValidarEmail(string email)
+        public async Task<sentirsebien_backend.Domain.Entities.Usuario> ValidarEmail(string email)
         {
-            var usuarioDb = _context.Usuarios
-                //.Include(u => u.Roles) // incluir roles relacionados
-                .FirstOrDefault(u => u.Email == email);
+            // buscar usuario por email de manera asincrónica en la base de datos
+            var usuarioDb = await _context.Usuarios
+                //.Include(u => u.Roles) // Descomentar si es necesario incluir los roles relacionados
+                .FirstOrDefaultAsync(u => u.Email == email);
 
             if (usuarioDb == null)
             {
-                return null;
+                return null; // Si no se encuentra el usuario, retorna null
             }
 
+            // mapear entidad de base de datos a entidad de dominio
             return _mapper.Map<sentirsebien_backend.Domain.Entities.Usuario>(usuarioDb);
         }
 

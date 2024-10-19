@@ -8,31 +8,35 @@ using System.Threading.Tasks;
 public class AutenticacionController : ControllerBase
 {
     private readonly IAutenticacionService _autenticacionService;
+    private readonly ITokenService _tokenService;
 
-    public AutenticacionController(IAutenticacionService autenticacionService)
+    public AutenticacionController(IAutenticacionService autenticacionService, ITokenService tokenService)
     {
         _autenticacionService = autenticacionService;
+        _tokenService = tokenService;
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] AutenticacionDTO dto)
     {
         // validar modelo
+
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
         // autenticar al usuario
-        bool esAutenticado = await _autenticacionService.AutenticarUsuario(dto.Email, dto.Contraseña);
 
-        if (!esAutenticado)
+        string token = await _autenticacionService.AutenticarUsuario(dto.Email, dto.Contraseña);
+
+        if (token == null) // si la autenticación falla, el token será null
         {
             return Unauthorized("Credenciales incorrectas.");
         }
 
-        // generar y devolver token
-        var token = await _autenticacionService.GenerarToken(dto.Email);
+        // si la autenticación es exitosa, se devuelve el token
+
         return Ok(new { Token = token });
     }
 }
