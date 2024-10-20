@@ -13,6 +13,8 @@ namespace sentirsebien_backend.DataAccess.DbContexts
         public DbSet<sentirsebien_backend.DataAccess.Models.Personal> Personales { get; set; }
         public DbSet<sentirsebien_backend.DataAccess.Models.Rol> Roles { get; set; }
         public DbSet<sentirsebien_backend.DataAccess.Models.Permiso> Permisos { get; set; }
+        public DbSet<sentirsebien_backend.DataAccess.Models.Administrativo> Administrativos { get; set; }
+        public DbSet<sentirsebien_backend.DataAccess.Models.Terapeuta> Terapeutas { get; set; }
         public DbSet<UsuarioRol> UsuarioRoles { get; set; }
         public DbSet<RolPermiso> RolPermisos { get; set; }
 
