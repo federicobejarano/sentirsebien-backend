@@ -24,49 +24,34 @@ namespace sentirsebien_backend.Application.Services
         public async Task<string> AutenticarUsuario(string email, string password)
         {
             // 1. validar el email del usuario (obtener la entidad Usuario)
-            Usuario usuario = await _usuarioRepository.ValidarEmail(email); // error: "Usuario" no posee una definición para `GetAwaiter`
+            Usuario usuario = await _usuarioRepository.ValidarEmail(email);
 
-            if (usuario == null)
-            {
-                // si el usuario no existe, retornar null
-                return null;
-            }
+            if (usuario == null) { return null; }
 
             // 2. verificar la contraseña (comparar el hash almacenado con la ingresada)
             bool passwordValida = _passwordService.VerifyPassword(usuario.Contraseña, password);
 
-            if (!passwordValida)
-            {
-                // si la contraseña no es válida, retornar null
-                return null;
-            }
+            if (!passwordValida) { return null; }
 
             // 3. generar el token JWT usando el servicio de tokens
-            string token = await _tokenService.GenerarTokenAsync(usuario.Email);
-
-            return token; // Si la autenticación es exitosa, retornar el token generado
+            return await _tokenService.GenerarTokenAsync(usuario.Email);
         }
 
-        // generar token (puede ser utilizado si se requiere en otro contexto)
+        // generar token JWT
+
         public async Task<string> GenerarToken(string username)
         {
-            // generar nuevo token JWT
             return await _tokenService.GenerarTokenAsync(username);
         }
 
-        // invalidar un token (implementación de logout)
+        // invalidar token (implementación de logout)
+
         public async Task<bool> InvalidarToken(string token)
         {
-            // invalidar token a través del servicio de tokens
             bool resultado = await _tokenService.InvalidarTokenAsync(token);
 
-            if (!resultado)
-            {
-                // manejar invalidación fallida
-                return false;
-            }
+            if (!resultado) { return false; } // manejar invalidación fallida
 
-            // invalidación exitosa
             return true;
         }
 
