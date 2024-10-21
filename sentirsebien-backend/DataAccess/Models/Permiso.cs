@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace sentirsebien_backend.DataAccess.Models
 {
+    [Table("Permiso")]
     public class Permiso
     {
         [Key]

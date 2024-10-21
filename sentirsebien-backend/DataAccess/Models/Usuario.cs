@@ -1,8 +1,13 @@
-﻿namespace sentirsebien_backend.DataAccess.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace sentirsebien_backend.DataAccess.Models
 {
+    Table["Usuario"]
     public class Usuario
     {
-        public int Id { get; set; }  // PK
+        [Key]
+        public int ID { get; set; }  // PK
         public string Nombre { get; set; }  // VARCHAR(100)
         public string Apellido { get; set; }  // VARCHAR(100)
         public string Email { get; set; }  // VARCHAR(255)

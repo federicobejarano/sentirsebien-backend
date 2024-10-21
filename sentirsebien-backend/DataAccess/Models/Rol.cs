@@ -1,7 +1,12 @@
-﻿namespace sentirsebien_backend.DataAccess.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace sentirsebien_backend.DataAccess.Models
 {
+    [Table("Rol")]
     public class Rol
     {
+        [Key]
         public int ID { get; set; }  // PK
         public string Codigo { get; set; }  // VARCHAR(10)
         public string Nombre { get; set; }  // VARCHAR(50)
