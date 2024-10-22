@@ -54,6 +54,5 @@ namespace sentirsebien_backend.Application.Services
 
             return true;
         }
-
     }
 }

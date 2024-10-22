@@ -1,5 +1,6 @@
 ﻿using sentirsebien_backend.DataAccess.Repositories;
 using sentirsebien_backend.Domain.Entities;
+using sentirsebien_backend.Domain.Shared;
 
 namespace sentirsebien_backend.Domain.Services
 {
@@ -15,21 +16,30 @@ namespace sentirsebien_backend.Domain.Services
         }
 
         // asignar un rol a un usuario
-        public async Task AsignarRol(sentirsebien_backend.Domain.Entities.Usuario usuario, string nombreRol)
+        public async Task<Result> AsignarRol(Usuario usuario, string nombreRol)
         {
-            // Obtener el rol por su nombre de forma asíncrona
             var rol = await _rolRepository.GetByNombreAsync(nombreRol);
-
             if (rol == null)
             {
-                throw new Exception($"El rol '{nombreRol}' no existe.");
+                return Result.Failure($"El rol '{nombreRol}' no existe.");
             }
-
-            // Asignar el rol al usuario
-            usuario.AsignarRol(rol); // Asumiendo que tienes un método AsignarRol en la entidad Usuario
-
-            // Aquí podrías hacer otras acciones, como guardar los cambios en el repositorio si es necesario.
+            usuario.AsignarRol(rol);
+            return Result.Success();
         }
+
+
+        // asignar un rol a un usuario
+        public async Task<Usuario> AsignarRolPorDefecto(Usuario usuario)
+        {
+            var rol = await _rolRepository.GetByNombreAsync("Cliente");
+            if (rol == null)
+            {
+                throw new Exception("El rol por defecto 'Cliente' no existe.");
+            }
+            usuario.AsignarRol(rol);
+            return usuario;
+        }
+
 
 
         // eliminar un rol de un usuario
@@ -37,6 +47,8 @@ namespace sentirsebien_backend.Domain.Services
         // public void EliminarRol(int usuarioId, TipoRol tipoRol)
 
         // listar roles de un usuario
+
+        /*
         public List<Rol> ObtenerRolesPorUsuario(int usuarioId)
         {
             var usuario = _usuarioRepository.ObtenerPorId(usuarioId);
@@ -47,5 +59,6 @@ namespace sentirsebien_backend.Domain.Services
 
             return _rolRepository.ObtenerRolesPorUsuario(usuarioId);
         }
+        */
     }
 }
