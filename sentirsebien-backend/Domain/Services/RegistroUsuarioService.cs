@@ -1,6 +1,7 @@
 ﻿using sentirsebien_backend.API.Dtos;
 using sentirsebien_backend.DataAccess.Repositories;
 using sentirsebien_backend.Domain.Shared;
+using sentirsebien_backend.Domain.Entities;
 
 namespace sentirsebien_backend.Domain.Services
 {
@@ -44,7 +45,7 @@ namespace sentirsebien_backend.Domain.Services
             return Result.Success();
         }
 
-        public sentirsebien_backend.Domain.Entities.Usuario CrearUsuario(RegistroUsuarioDTO dto)
+        public Usuario CrearUsuario(RegistroUsuarioDTO dto)
         {
             // crear una nueva instancia de Usuario con el DTO proporcionado
             return new sentirsebien_backend.Domain.Entities.Usuario(
