@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace sentirsebien_backend.DataAccess.Repositories
 {
-    public class RolRepository : IRolRepository
+    public class RolRepository // : IRolRepository
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;

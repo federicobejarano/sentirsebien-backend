@@ -8,8 +8,9 @@ namespace sentirsebien_backend.DataAccess.Repositories
         void CrearPermiso(sentirsebien_backend.Domain.Entities.Permiso permiso);
         void ActualizarPermiso(sentirsebien_backend.Domain.Entities.Permiso permiso);
         void EliminarPermiso(string nombre);
-        List<sentirsebien_backend.Domain.Entities.Permiso> ObtenerPermisosPorRol(int rolId);
-        List<sentirsebien_backend.Domain.Entities.Permiso> ObtenerPermisosPorUsuario(int usuarioId);
+        Task <List<sentirsebien_backend.Domain.Entities.Permiso>> ObtenerPermisosPorRol(int rolId);
+
+        // List<sentirsebien_backend.Domain.Entities.Permiso> ObtenerPermisosPorUsuario(int usuarioId); <-- no va: manejado en `AutorizacionService`
     }
 }
 
