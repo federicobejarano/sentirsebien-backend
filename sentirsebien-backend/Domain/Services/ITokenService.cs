@@ -17,6 +17,5 @@
         // método 5. asignar permisos según los roles
 
         // método 6. punto de entrada al service de autorización
-        //  -   gestiona recursos y funcionalidades disponibles (en otros services) llamando a los métodos 1 a 5
     }
 }

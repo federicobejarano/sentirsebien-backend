@@ -49,6 +49,18 @@ namespace sentirsebien_backend.DataAccess.Repositories
         }
 
         // obtener usuario por nombre de usuario
+        public async Task<sentirsebien_backend.Domain.Entities.Usuario> ObtenerPorEmailAsync(string email)
+        {
+            var usuarioDb = await _context.Usuarios
+                .Include(u => u.Roles) // incluir roles relacionados
+                .FirstOrDefaultAsync(u => u.Email == email);
+
+            if (usuarioDb != null) return _mapper.Map<sentirsebien_backend.Domain.Entities.Usuario>(usuarioDb);
+
+            else return null;
+        }
+
+        // obtener usuario por nombre de usuario
         public async Task<sentirsebien_backend.Domain.Entities.Usuario> ValidarEmail(string email)
         {
             // buscar usuario por email de manera asincrónica en la base de datos

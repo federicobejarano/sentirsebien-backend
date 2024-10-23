@@ -24,6 +24,8 @@ namespace sentirsebien_backend.DataAccess.Repositories
 
         Task<sentirsebien_backend.Domain.Entities.Usuario> ObtenerPorNombreUsuarioAsync(string nombreUsuario);
 
+        Task<sentirsebien_backend.Domain.Entities.Usuario> ObtenerPorEmailAsync(string email);
+
         Task<IEnumerable<Usuario>> ObtenerTodosAsync();
 
         Task<Result> AgregarAsync(sentirsebien_backend.Domain.Entities.Usuario usuario);

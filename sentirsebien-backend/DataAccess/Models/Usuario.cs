@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace sentirsebien_backend.DataAccess.Models
 {
-    Table["Usuario"]
+    [Table("Usuario")]
     public class Usuario
     {
         [Key]

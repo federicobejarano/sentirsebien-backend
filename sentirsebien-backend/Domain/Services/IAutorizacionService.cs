@@ -18,6 +18,6 @@ namespace sentirsebien_backend.Domain.Services
         Task<IEnumerable<Rol>> ObtenerRolesDeUsuarioAsync(int usuarioId);
 
         // obtener tanto roles como permisos del usuario en un objeto de valor (AutorizacionUsuario)
-        Task<AutorizacionUsuario> ObtenerAutorizacionUsuarioAsync(int usuarioId);
+        Task<AutorizacionUsuario> ObtenerAutorizacionUsuarioAsync(int usuarioId, string email, string password);
     }
 }

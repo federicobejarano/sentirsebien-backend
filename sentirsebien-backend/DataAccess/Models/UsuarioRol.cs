@@ -1,7 +1,9 @@
 ﻿using sentirsebien_backend.Domain.Entities;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace sentirsebien_backend.DataAccess.Models
 {
+    [Table("UsuarioRol")]
     public class UsuarioRol
     {
         public int ID_Usuario { get; set; }  // FK a Usuario
