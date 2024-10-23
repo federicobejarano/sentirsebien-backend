@@ -5,6 +5,22 @@ using sentirsebien_backend.Domain.Services;
 
 namespace sentirsebien_backend.API.Controllers
 {
+    /*
+    PROBAR EN POSTMAN:
+
+    - solicitud:
+
+    POST http://localhost:[número de localhost]/api/autenticacion/login
+
+    - cuerpo:
+
+    {
+      "Email": "juan.perez.2@example.com",
+      "Contraseña": "password123"
+    }
+ 
+    */
+
     [ApiController]
     [Route("api/[controller]")]
     public class LoginController : ControllerBase
