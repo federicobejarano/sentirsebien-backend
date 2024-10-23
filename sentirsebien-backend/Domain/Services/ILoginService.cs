@@ -1,4 +1,4 @@
-﻿using sentirsebien_backend.Domain.Entities;
+﻿using sentirsebien_backend.Domain.ValueObjects;
 
 namespace sentirsebien_backend.Domain.Services
 {
@@ -6,6 +6,7 @@ namespace sentirsebien_backend.Domain.Services
     {
         // método principal : gestionar proceso completo de login (autenticación, roles/permisos y token).
         Task<string> LoginAsync(string email, string password);
+
         // autenticar usuario. Valida email y contraseña llamando a IAutenticacionService.
         Task<bool> AutenticarUsuarioAsync(string email, string password);
 
