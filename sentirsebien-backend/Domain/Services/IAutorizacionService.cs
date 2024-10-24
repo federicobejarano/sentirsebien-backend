@@ -7,7 +7,7 @@ namespace sentirsebien_backend.Domain.Services
     {
 
         // obtener permisos asociados a los roles del usuario
-        Task<AutorizacionUsuario> ObtenerAutorizacionUsuarioAsync(Usuario usuario);
+        Task<DatosDeAutorizacionUsuario> ObtenerAutorizacionUsuarioAsync(Usuario usuario);
 
         /**** implementar después ****/
 

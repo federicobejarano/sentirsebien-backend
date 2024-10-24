@@ -21,7 +21,7 @@ namespace sentirsebien_backend.Domain.Services
         }
 
         // Método principal: gestionar proceso completo de login
-        public async Task<AutorizacionUsuario> LoginAsync(string email, string password)
+        public async Task<DatosDeAutorizacionUsuario> LoginAsync(string email, string password)
         {
             // 1. autenticar usuario
 
@@ -41,7 +41,7 @@ namespace sentirsebien_backend.Domain.Services
 
             // 3. devolver el objeto de valor AutorizacionUsuario
 
-            return await _autorizacionService.ObtenerAutorizacionUsuarioAsync(usuario); // modificar: devolver token de autorización ??
+            return await _autorizacionService.ObtenerAutorizacionUsuarioAsync(usuario); // modificar: devolver token autenticacion (incluye autorizacion)
         }
 
         public async Task<bool> UsuarioNoAutenticado(string email, string password)

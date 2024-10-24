@@ -22,7 +22,7 @@ namespace sentirsebien_backend.Application.Services
         }
 
         // autenticar al usuario
-        public async Task<bool> AutenticarUsuario(string email, string password)
+        public async Task<bool> AutenticarUsuarioAsync(string email, string password)
         {
             // validar el email del usuario (obtener la entidad Usuario)
             sentirsebien_backend.Domain.Entities.Usuario usuario = await _usuarioRepository.ValidarEmail(email);

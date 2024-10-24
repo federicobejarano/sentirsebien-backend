@@ -18,7 +18,7 @@ namespace sentirsebien_backend.Domain.Services
         }
 
         // método principal : obtener roles y permisos del usuario
-        public async Task<AutorizacionUsuario> ObtenerAutorizacionUsuarioAsync(Usuario usuario)
+        public async Task<DatosDeAutorizacionUsuario> ObtenerAutorizacionUsuarioAsync(Usuario usuario)
         {
             // 1.
             var roles = await ObtenerRolesDeUsuarioAsync(usuario.Id);
@@ -27,7 +27,7 @@ namespace sentirsebien_backend.Domain.Services
             var permisos = await ObtenerPermisosPorRolesAsync(roles);
 
             // 3. 
-            return new AutorizacionUsuario(usuario.Id, usuario.Email, roles.ToList(), permisos.ToList());
+            return new DatosDeAutorizacionUsuario(usuario.Id, usuario.Email, roles.ToList(), permisos.ToList());
         }
 
         // otros métodos
