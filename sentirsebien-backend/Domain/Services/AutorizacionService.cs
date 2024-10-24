@@ -27,7 +27,7 @@ namespace sentirsebien_backend.Domain.Services
             var permisos = await ObtenerPermisosPorRolesAsync(roles);
 
             // 3. 
-            return new DatosDeAutorizacionUsuario(usuario.Id, usuario.Email, roles.ToList(), permisos.ToList());
+            return new DatosDeAutorizacionUsuario(usuario.Id, roles.ToList(), permisos.ToList());
         }
 
         // otros métodos

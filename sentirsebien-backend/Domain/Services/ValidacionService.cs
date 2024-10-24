@@ -14,7 +14,7 @@ namespace sentirsebien_backend.Domain.Services
 
         public async Task<bool> ValidarEmailExistente(string email)
         {
-            var usuarioExistente = await _usuarioRepository.ValidarEmail(email);
+            var usuarioExistente = await _usuarioRepository.ObtenerPorEmail(email);
             return usuarioExistente != null;
         }
 

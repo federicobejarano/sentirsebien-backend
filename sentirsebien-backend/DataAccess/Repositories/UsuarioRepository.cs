@@ -61,7 +61,7 @@ namespace sentirsebien_backend.DataAccess.Repositories
         }
 
         // obtener usuario por nombre de usuario
-        public async Task<sentirsebien_backend.Domain.Entities.Usuario> ValidarEmail(string email)
+        public async Task<sentirsebien_backend.Domain.Entities.Usuario> ObtenerPorEmail(string email)
         {
             // buscar usuario por email de manera asincrónica en la base de datos
             var usuarioDb = await _context.Usuarios

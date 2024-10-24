@@ -3,47 +3,43 @@ using sentirsebien_backend.Domain.Entities;
 using sentirsebien_backend.DataAccess.Repositories;
 using sentirsebien_backend.Domain.Services;
 using System.Threading.Tasks;
-using sentirsebien_backend.DataAccess.Models;
+using sentirsebien_backend.Domain.ValueObjects;
 
 namespace sentirsebien_backend.Application.Services
 {
-    public class AutenticacionService : IAutenticacionService
+    public class AutenticacionService // : IAutenticacionService
     {
+        private readonly IAutorizacionService _autorizacionService;
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IPasswordService _passwordService;
         private readonly ITokenService _tokenService;
 
         // inyectar las dependencias
-        public AutenticacionService(IUsuarioRepository usuarioRepository, IPasswordService passwordService, ITokenService tokenService)
+        public AutenticacionService(IUsuarioRepository usuarioRepository, IPasswordService passwordService, ITokenService tokenService, IAutorizacionService autorizacionService)
         {
             _usuarioRepository = usuarioRepository;
             _passwordService = passwordService;
             _tokenService = tokenService;
+            _autorizacionService = autorizacionService;
         }
 
-        // autenticar al usuario
-        public async Task<bool> AutenticarUsuarioAsync(string email, string password)
+        // autenticar (y autorizar) al usuario
+        public async Task<TokenAutenticacion> AutenticarUsuarioAsync(string email, string password)
         {
-            // validar el email del usuario (obtener la entidad Usuario)
-            sentirsebien_backend.Domain.Entities.Usuario usuario = await _usuarioRepository.ValidarEmail(email);
+            // obtener usuario o devolver null
 
-            if (usuario == null) { return false; }
+            if ((await ObtenerUsuarioONull(email)) is not Usuario usuario) return null;
 
-            // retornar resultado de validación de password
-            return await PasswordValida(usuario, password);
+            // obtener datos de autenticación + autorización
+
+            DatosDeAutenticacionUsuario datosDeAutenticacion = ObtenerDatosDeAutenticacion(usuario);
+            DatosDeAutorizacionUsuario datosDeAutorizacion = await _autorizacionService.ObtenerAutorizacionUsuarioAsync(usuario);
+
+            // obtener token
+
+            return await ObtenerToken(datosDeAutenticacion, datosDeAutorizacion);
         }
 
-        private async Task<bool> PasswordValida(sentirsebien_backend.Domain.Entities.Usuario usuario, string password)
-        {
-            return _passwordService.VerifyPassword(usuario.Contraseña, password);
-        }
-
-        // generar token JWT
-
-        public async Task<string> GenerarToken(string username)
-        {
-            return await _tokenService.GenerarTokenAsync(username);
-        }
 
         // invalidar token (implementación de logout)
 
@@ -54,6 +50,27 @@ namespace sentirsebien_backend.Application.Services
             if (!resultado) { return false; } // manejar invalidación fallida
 
             return true;
+        }
+
+        // métodos privados
+
+        private async Task<Usuario> ObtenerUsuarioONull(string email)
+        {
+            Usuario usuario = await _usuarioRepository.ObtenerPorEmail(email);
+
+            return usuario;
+        }
+
+        private DatosDeAutenticacionUsuario ObtenerDatosDeAutenticacion(Usuario usuario)
+        {
+            return new DatosDeAutenticacionUsuario(usuario.Id, usuario.Email);
+        }
+
+        // generar token JWT
+
+        private async Task<TokenAutenticacion> ObtenerToken(DatosDeAutenticacionUsuario datosDeAutenticacion, DatosDeAutorizacionUsuario datosDeAutorizacion)
+        {
+            return await _tokenService.GenerarTokenAsync(datosDeAutenticacion, datosDeAutorizacion);
         }
     }
 }

@@ -1,8 +1,13 @@
-﻿namespace sentirsebien_backend.Domain.Services
+﻿using sentirsebien_backend.Domain.ValueObjects;
+
+namespace sentirsebien_backend.Domain.Services
 {
     public interface ITokenService
     {
-        Task<string> GenerarTokenAsync(string username); // generar token para un usuario autenticado
+        // Task<string> GenerarTokenAsync(string username); // generar token para un usuario autenticado
+
+        Task<TokenAutenticacion> GenerarTokenAsync(DatosDeAutenticacionUsuario datosDeAutenticacion, DatosDeAutorizacionUsuario datosDeAutorizacion);
+
         Task<bool> ValidarTokenAsync(string token); // validar token existente
         Task<bool> InvalidarTokenAsync(string token); // invalidar token existente
 

@@ -20,7 +20,7 @@ namespace sentirsebien_backend.DataAccess.Repositories
 
         Task<sentirsebien_backend.Domain.Entities.Usuario> ObtenerPorIdAsync(int usuarioId);
 
-        Task<sentirsebien_backend.Domain.Entities.Usuario> ValidarEmail(string email);
+        Task<sentirsebien_backend.Domain.Entities.Usuario> ObtenerPorEmail(string email);
 
         Task<sentirsebien_backend.Domain.Entities.Usuario> ObtenerPorNombreUsuarioAsync(string nombreUsuario);
 
