@@ -1,21 +1,24 @@
 ﻿using sentirsebien_backend.DataAccess.Repositories;
 using sentirsebien_backend.Domain.Entities;
-using sentirsebien_backend.DataAccess.Repositories;
+using sentirsebien_backend.Domain.Exceptions;
 using sentirsebien_backend.Domain.Services;
-using System.Threading.Tasks;
 using sentirsebien_backend.Domain.ValueObjects;
 
 namespace sentirsebien_backend.Application.Services
 {
-    public class AutenticacionService // : IAutenticacionService
+    public class AutenticacionService : IAutenticacionService
     {
         private readonly IAutorizacionService _autorizacionService;
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IPasswordService _passwordService;
         private readonly ITokenService _tokenService;
 
-        // inyectar las dependencias
-        public AutenticacionService(IUsuarioRepository usuarioRepository, IPasswordService passwordService, ITokenService tokenService, IAutorizacionService autorizacionService)
+        // constructor para inyección de dependencias
+        public AutenticacionService(
+            IUsuarioRepository usuarioRepository,
+            IPasswordService passwordService,
+            ITokenService tokenService,
+            IAutorizacionService autorizacionService)
         {
             _usuarioRepository = usuarioRepository;
             _passwordService = passwordService;
@@ -23,54 +26,45 @@ namespace sentirsebien_backend.Application.Services
             _autorizacionService = autorizacionService;
         }
 
-        // autenticar (y autorizar) al usuario
-        public async Task<TokenAutenticacion> AutenticarUsuarioAsync(string email, string password)
+        // autenticar y autorizar al usuario
+        public async Task<TokenAutenticacion> AutenticarUsuarioAsync(string email, string contraseña)
         {
-            // obtener usuario o devolver null
+            if (!EsContraseñaValida(contraseña)) return null;
 
-            if ((await ObtenerUsuarioONull(email)) is not Usuario usuario) return null;
+            // obtener el usuario, o lanzar excepción si no existe
+            var usuario = await ObtenerUsuarioPorEmail(email)
+                ?? throw new UsuarioNoEncontradoException("El usuario no existe o el email es incorrecto.");
 
-            // obtener datos de autenticación + autorización
+            // generar los datos de autenticación y autorización
+            var datosDeAutenticacion = new DatosDeAutenticacionUsuario(usuario.Id, usuario.Email);
+            var datosDeAutorizacion = await _autorizacionService.ObtenerAutorizacionUsuarioAsync(usuario);
 
-            DatosDeAutenticacionUsuario datosDeAutenticacion = ObtenerDatosDeAutenticacion(usuario);
-            DatosDeAutorizacionUsuario datosDeAutorizacion = await _autorizacionService.ObtenerAutorizacionUsuarioAsync(usuario);
-
-            // obtener token
-
-            return await ObtenerToken(datosDeAutenticacion, datosDeAutorizacion);
+            // generar y retornar el token JWT
+            return await _tokenService.GenerarTokenAsync(datosDeAutenticacion, datosDeAutorizacion);
         }
 
-
-        // invalidar token (implementación de logout)
-
+        // invalidar el token (para logout)
         public async Task<bool> InvalidarToken(string token)
         {
-            bool resultado = await _tokenService.InvalidarTokenAsync(token);
-
-            if (!resultado) { return false; } // manejar invalidación fallida
-
-            return true;
+            return await _tokenService.InvalidarTokenAsync(token);
         }
 
         // métodos privados
 
-        private async Task<Usuario> ObtenerUsuarioONull(string email)
+        private async Task<Usuario> ObtenerUsuarioPorEmail(string email)
         {
-            Usuario usuario = await _usuarioRepository.ObtenerPorEmail(email);
-
-            return usuario;
+            return await _usuarioRepository.ObtenerPorEmail(email);
         }
 
-        private DatosDeAutenticacionUsuario ObtenerDatosDeAutenticacion(Usuario usuario)
+        private bool EsContraseñaValida(string contraseña)
         {
-            return new DatosDeAutenticacionUsuario(usuario.Id, usuario.Email);
-        }
-
-        // generar token JWT
-
-        private async Task<TokenAutenticacion> ObtenerToken(DatosDeAutenticacionUsuario datosDeAutenticacion, DatosDeAutorizacionUsuario datosDeAutorizacion)
-        {
-            return await _tokenService.GenerarTokenAsync(datosDeAutenticacion, datosDeAutorizacion);
+            var hash = _passwordService.HashPassword(contraseña);
+            if (!_passwordService.VerifyPassword(hash, contraseña))
+            {
+                throw new ContraseñaInvalidaException("La contraseña proporcionada es incorrecta.");
+            }
+            return true;
         }
     }
 }
+
