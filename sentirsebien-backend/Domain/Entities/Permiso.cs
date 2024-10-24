@@ -8,7 +8,7 @@
         private string descripcion;
         private string categoria;
 
-        public string Nombre
+        public string NombrePermiso
         {
             get { return nombre; }
             set { nombre = value; }
@@ -35,7 +35,7 @@
 
         public override string ToString()
         {
-            return $"{Nombre} ({Categoria}): {Descripcion}";
+            return $"{NombrePermiso} ({Categoria}): {Descripcion}";
         }
     }
 }
