@@ -1,85 +1,43 @@
 ﻿using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
 
 namespace sentirsebien_backend.Domain.ValueObjects
 {
-   
-
     public class TokenAutenticacion
     {
-        public string Valor { get; private set; }
-        public DateTime Expiracion { get; private set; }
+        public string Token { get; private set; }
+        public DateTime FechaCreacion { get; private set; }
+        public DateTime FechaExpiracion { get; private set; }
+        public int UserId { get; private set; }
+        public string Email { get; private set; }
+        public IReadOnlyCollection<string> Roles { get; private set; }
+        public IReadOnlyCollection<string> Permisos { get; private set; }
 
-        private readonly string claveSecreta;
-
-        public TokenAutenticacion(string claveSecreta)
+        public TokenAutenticacion(
+            string token,
+            DateTime fechaCreacion,
+            DateTime fechaExpiracion,
+            int userId,
+            string email,
+            IReadOnlyCollection<string> roles,
+            IReadOnlyCollection<string> permisos)
         {
-            this.claveSecreta = claveSecreta;
+            Token = token ?? throw new ArgumentNullException(nameof(token));
+            FechaCreacion = fechaCreacion;
+            FechaExpiracion = fechaExpiracion;
+            UserId = userId;
+            Email = email ?? throw new ArgumentNullException(nameof(email));
+            Roles = roles ?? throw new ArgumentNullException(nameof(roles));
+            Permisos = permisos ?? throw new ArgumentNullException(nameof(permisos));
         }
 
-        // generar un JWT
-        public void GenerarToken(string usuarioId, string rol, int minutosDeExpiracion = 30)
+        public bool EsValido()
         {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var clave = Encoding.ASCII.GetBytes(claveSecreta);
-
-            // información que estará dentro del token (claims)
-            var claims = new[]
-            {
-            new Claim(ClaimTypes.NameIdentifier, usuarioId),
-            new Claim(ClaimTypes.Role, rol)
-        };
-
-            // descripción del token
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddMinutes(minutosDeExpiracion),
-                SigningCredentials = new SigningCredentials(
-                    new SymmetricSecurityKey(clave),
-                    SecurityAlgorithms.HmacSha256Signature)
-            };
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            Valor = tokenHandler.WriteToken(token);
-            Expiracion = tokenDescriptor.Expires.Value;
+            return DateTime.UtcNow < FechaExpiracion;
         }
 
-        // validar un token
-        public bool ValidarToken(string token)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var clave = Encoding.ASCII.GetBytes(claveSecreta);
-
-            try
-            {
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(clave),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    // permitir algunos segundos de tolerancia para expiraciones cercanas
-                    ClockSkew = TimeSpan.Zero
-                }, out SecurityToken securityToken);
-
-                var jwtToken = (JwtSecurityToken)securityToken;
-                return true; // token válido
-            }
-            catch
-            {
-                return false; // token no válido
-            }
-        }
-
-        // comprobar si el token ha expirado
         public bool EstaExpirado()
         {
-            return DateTime.UtcNow > Expiracion;
+            return DateTime.UtcNow >= FechaExpiracion;
         }
     }
-
 }
