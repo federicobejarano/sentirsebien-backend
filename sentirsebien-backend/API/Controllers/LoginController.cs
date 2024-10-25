@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using sentirsebien_backend.Application.DTOs;
 using sentirsebien_backend.Domain.Services;
+using sentirsebien_backend.Domain.ValueObjects;
 
 namespace sentirsebien_backend.API.Controllers
 {
@@ -42,16 +43,25 @@ namespace sentirsebien_backend.API.Controllers
             try
             {
                 // llamar al servicio de logueo para gestionar el proceso
-                string token = await _loginService.LoginAsync(loginRequest.Email, loginRequest.Password);
+                TokenAutenticacion token = await _loginService.LoginAsync(loginRequest.Email, loginRequest.Password);
 
                 // gestionar autenticación fallida
-                if (string.IsNullOrEmpty(token))
+                if (token == null || string.IsNullOrEmpty(token.Token))
                 {
                     return Unauthorized(new { message = "Invalid credentials" });
                 }
 
-                // devolver el token generado
-                return Ok(new { token });
+                // devolver el token generado y la información adicional
+                return Ok(new
+                {
+                    token = token.Token,
+                    fechaCreacion = token.FechaCreacion,
+                    fechaExpiracion = token.FechaExpiracion,
+                    userId = token.UserId,
+                    email = token.Email,
+                    roles = token.Roles,
+                    permisos = token.Permisos
+                });
             }
             catch (Exception ex)
             {

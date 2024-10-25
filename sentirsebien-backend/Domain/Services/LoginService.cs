@@ -1,9 +1,4 @@
-﻿using sentirsebien_backend.DataAccess.Repositories;
-using sentirsebien_backend.Domain.ValueObjects;
-using sentirsebien_backend.Domain.Entities;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using sentirsebien_backend.Domain.ValueObjects;
 
 namespace sentirsebien_backend.Domain.Services
 {
