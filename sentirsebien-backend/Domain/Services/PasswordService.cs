@@ -1,14 +1,17 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using sentirsebien_backend.DataAccess.Repositories;
 
 namespace sentirsebien_backend.Domain.Services
 {
     public class PasswordService : IPasswordService
     {
         private readonly PasswordHasher<object> _passwordHasher;
+        private readonly IUsuarioRepository _usuarioRepository;
 
-        public PasswordService()
+        public PasswordService(IUsuarioRepository usuarioRepository)
         {
             _passwordHasher = new PasswordHasher<object>();
+            _usuarioRepository = usuarioRepository;
         }
 
         // generar el hash de la contraseña
@@ -23,6 +26,11 @@ namespace sentirsebien_backend.Domain.Services
         {
             var result = _passwordHasher.VerifyHashedPassword(null, hashedPassword, providedPassword);
             return result == PasswordVerificationResult.Success;
+        }
+
+        public async Task<string> ObtenerContraseñaPorIdUsuario(int idUsuario)
+        {
+            return await _usuarioRepository.BuscarContraseñaAsync(idUsuario);
         }
     }
 }

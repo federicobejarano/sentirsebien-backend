@@ -9,20 +9,17 @@ namespace sentirsebien_backend.Domain.Services
     {
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly IPasswordService _passwordService;
-        private readonly IRolRepository _rolRepository;
         private readonly IGestorRolesService _gestorRolesService;
         private readonly IValidacionService _validacionService;
 
         public RegistroUsuarioService(
             IUsuarioRepository usuarioRepository,
             IPasswordService passwordService,
-            IRolRepository rolRepository,
             IGestorRolesService gestorRolesService,
             IValidacionService validacionService)
         {
             _usuarioRepository = usuarioRepository;
             _passwordService = passwordService;
-            _rolRepository = rolRepository;
             _gestorRolesService = gestorRolesService;
             _validacionService = validacionService;
         }

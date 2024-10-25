@@ -29,11 +29,13 @@ namespace sentirsebien_backend.Application.Services
         // autenticar y autorizar al usuario
         public async Task<TokenAutenticacion> AutenticarUsuarioAsync(string email, string contraseña)
         {
-            if (!EsContraseñaValida(contraseña)) return null;
-
             // obtener el usuario, o lanzar excepción si no existe
             var usuario = await ObtenerUsuarioPorEmail(email)
                 ?? throw new UsuarioNoEncontradoException("El usuario no existe o el email es incorrecto.");
+
+            // validar contraseña
+            if (!await EsContraseñaValida(contraseña, usuario.Id))
+                throw new ContraseñaInvalidaException("La contraseña proporcionada es incorrecta.");
 
             // generar los datos de autenticación y autorización
             var datosDeAutenticacion = new DatosDeAutenticacionUsuario(usuario.Id, usuario.Email);
@@ -53,17 +55,17 @@ namespace sentirsebien_backend.Application.Services
 
         private async Task<Usuario> ObtenerUsuarioPorEmail(string email)
         {
-            return await _usuarioRepository.ObtenerPorEmail(email);
+            return await _usuarioRepository.ObtenerPorEmailAsync(email);
         }
 
-        private bool EsContraseñaValida(string contraseña)
+        private async Task<bool> EsContraseñaValida(string contraseñaIngresada, int idUsuario)
         {
-            var hash = _passwordService.HashPassword(contraseña);
-            if (!_passwordService.VerifyPassword(hash, contraseña))
-            {
-                throw new ContraseñaInvalidaException("La contraseña proporcionada es incorrecta.");
-            }
-            return true;
+            var hashAlmacenado = await _usuarioRepository.BuscarContraseñaAsync(idUsuario);
+
+            if (string.IsNullOrEmpty(hashAlmacenado))
+                throw new ContraseñaInvalidaException("No se encontró una contraseña almacenada para el usuario.");
+
+            return _passwordService.VerifyPassword(hashAlmacenado, contraseñaIngresada);
         }
     }
 }
