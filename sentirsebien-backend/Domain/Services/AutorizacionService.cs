@@ -42,18 +42,13 @@ namespace sentirsebien_backend.Domain.Services
         // obtener permisos asociados a cada rol
         private async Task<IEnumerable<Permiso>> ObtenerPermisosPorRolesAsync(IEnumerable<Rol> roles)
         {
-            var permisosUnicos = new HashSet<Permiso>();
+            // Extraer los IDs de los roles
+            var roleIds = roles.Select(r => r.Id).ToList();
 
-            foreach (var rol in roles)
-            {
-                var permisosPorRol = await _permisoRepository.ObtenerPermisosPorRol(rol.Id);
-                foreach (var permiso in permisosPorRol)
-                {
-                    permisosUnicos.Add(permiso);
-                }
-            }
+            // Hacer una sola consulta para obtener los permisos asociados a todos los roles
+            var permisos = await _permisoRepository.ObtenerPermisosPorRoles(roleIds);
 
-            return permisosUnicos;
+            return permisos;
         }
     }
 }
