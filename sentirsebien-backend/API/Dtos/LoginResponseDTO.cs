@@ -24,5 +24,4 @@ namespace sentirsebien_backend.Application.DTOs
             Permisos = token.Permisos;
         }
     }
-
 }
