@@ -13,6 +13,7 @@ namespace sentirsebien_backend.DataAccess.Repositories
         void ActualizarRol(Rol rol);
         void CrearRol(sentirsebien_backend.Domain.Entities.Rol rol);
         void EliminarRol(int id);
+
         public Task<List<Rol>> ObtenerTodosLosRoles();
         public Task<List<Rol>> ObtenerRolesPorUsuario(int usuarioId);
 

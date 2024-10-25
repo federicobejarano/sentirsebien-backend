@@ -1,17 +1,15 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using sentirsebien_backend.DataAccess.DbContexts;
-using sentirsebien_backend.DataAccess.Models;
 using sentirsebien_backend.Domain.Entities;
-using sentirsebien_backend.Domain.Services;
+using sentirsebien_backend.DataAccess.Models;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace sentirsebien_backend.DataAccess.Repositories
 {
-    public class RolRepository // : IRolRepository
+    public class RolRepository : IRolRepository
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -22,18 +20,12 @@ namespace sentirsebien_backend.DataAccess.Repositories
             _mapper = mapper;
         }
 
-        public sentirsebien_backend.Domain.Entities.Rol ObtenerRolPorId(int id)
-        {
-            var rol = _context.Roles.Find(id); // entre 1 y 5
-            return _mapper.Map<sentirsebien_backend.Domain.Entities.Rol>(rol);
-        }
-
-
         public async Task<sentirsebien_backend.Domain.Entities.Rol> GetByNombreAsync(string nombreRol)
         {
             var rol = await _context.Roles
-                .Include(r => r.Permisos) // Incluir la lista de permisos
-                .FirstOrDefaultAsync(r => r.Nombre == nombreRol); // Buscar por nombre
+                .Include(r => r.Permisos)  // Incluye permisos relacionados
+                .FirstOrDefaultAsync(r => r.Nombre == nombreRol);
+
             return _mapper.Map<sentirsebien_backend.Domain.Entities.Rol>(rol);
         }
 
@@ -49,7 +41,7 @@ namespace sentirsebien_backend.DataAccess.Repositories
             var rolExistente = _context.Roles.Find(rol.Id);
             if (rolExistente != null)
             {
-                _mapper.Map(rol, rolExistente); // mapear la entidad de dominio sobre la entidad existente
+                _mapper.Map(rol, rolExistente);
                 _context.Roles.Update(rolExistente);
                 _context.SaveChanges();
             }
@@ -65,47 +57,38 @@ namespace sentirsebien_backend.DataAccess.Repositories
             }
         }
 
-        public List<sentirsebien_backend.Domain.Entities.Rol> ObtenerTodosLosRoles()
+        public async Task<List<sentirsebien_backend.Domain.Entities.Rol>> ObtenerTodosLosRoles()
         {
-            var roles = _context.Roles.ToList();
+            var roles = await _context.Roles.ToListAsync();
             return _mapper.Map<List<sentirsebien_backend.Domain.Entities.Rol>>(roles);
         }
 
-        public List<sentirsebien_backend.Domain.Entities.Rol> ObtenerRolesPorUsuario(int usuarioId)
+        public async Task<List<sentirsebien_backend.Domain.Entities.Rol>> ObtenerRolesPorUsuario(int usuarioId)
         {
-            var usuario = _context.Usuarios
+            var usuario = await _context.Usuarios
                 .Include(u => u.Roles)
-                .ThenInclude(ur => ur.Rol) // revisar
-                .FirstOrDefault(u => u.Id == usuarioId);
+                .ThenInclude(ur => ur.Rol)
+                .FirstOrDefaultAsync(u => u.ID == usuarioId);
 
-            return _mapper.Map<List<sentirsebien_backend.Domain.Entities.Rol>>(usuario?.Roles.Select(ur => ur.Rol).ToList());
+            if (usuario == null)
+                return new List<sentirsebien_backend.Domain.Entities.Rol>();
+
+            var rolesDeUsuario = usuario.Roles.Select(ur => ur.Rol).ToList();
+            return _mapper.Map<List<sentirsebien_backend.Domain.Entities.Rol>>(rolesDeUsuario);
         }
 
-        // Obtener permisos por Rol, asegurando que el tipo coincida.
         public List<sentirsebien_backend.Domain.Entities.Permiso> ObtenerPermisosPorRol(int rolId)
         {
-            var rol = ObtenerRolPorId(rolId);
+            var rol = _context.Roles
+                .Include(r => r.Permisos)
+                .FirstOrDefault(r => r.ID == rolId);
+
             if (rol == null)
             {
                 throw new Exception("Rol no encontrado.");
             }
 
-            if (SistemaPermisos.PermisosPorRol.TryGetValue(rol.Tipo, out List<sentirsebien_backend.Domain.Entities.Permiso> permisos))
-            {
-                return permisos;
-            }
-
-            throw new Exception("No se encontraron permisos para el rol especificado.");
+            return _mapper.Map<List<sentirsebien_backend.Domain.Entities.Permiso>>(rol.Permisos.Select(rp => rp.Permiso).ToList());
         }
-
-        /*
-        public List<sentirsebien_backend.DataAccess.Models.Permiso> ObtenerPermisosPorRol(int rolId)
-        {
-            return _context.RolPermisos
-                .Where(rp => rp.ID_Rol == rolId)
-                .Select(rp => rp.Permiso)
-                .ToList();
-        }
-        */
     }
 }

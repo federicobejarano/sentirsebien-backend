@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using sentirsebien_backend.Domain.ValueObjects;
+using sentirsebien_backend.Domain.Services;
 
 namespace sentirsebien_backend.API.Middleware
 {
@@ -13,11 +10,13 @@ namespace sentirsebien_backend.API.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly TokenAutenticacion _tokenAutenticacion;
+        private readonly ITokenService _tokenService;
 
-        public AutenticacionMiddleware(RequestDelegate next, TokenAutenticacion tokenAutenticacion)
+        public AutenticacionMiddleware(RequestDelegate next, TokenAutenticacion tokenAutenticacion, ITokenService tokenService)
         {
             _next = next;
             _tokenAutenticacion = tokenAutenticacion;
+            _tokenService = tokenService;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -28,7 +27,7 @@ namespace sentirsebien_backend.API.Middleware
                 var token = authHeader.FirstOrDefault()?.Split(" ").Last();
 
                 // verificar token
-                if (!string.IsNullOrEmpty(token) && _tokenAutenticacion.ValidarToken(token))
+                if (!string.IsNullOrEmpty(token) && await _tokenService.ValidarTokenAsync(token))
                 {
                     // extraer claims del token y añadirlos al contexto
                     var tokenHandler = new JwtSecurityTokenHandler();
