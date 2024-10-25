@@ -36,6 +36,8 @@ builder.Services.AddControllers();
 
 // registrar servicios
 builder.Services.AddScoped<IRegistroUsuarioService, RegistroUsuarioService>();
+builder.Services.AddScoped<IGestorRolesService, GestorRolesService>();
+builder.Services.AddScoped<IValidacionService, ValidacionService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IPasswordService, PasswordService>();
 builder.Services.AddScoped<IRolRepository, RolRepository>();
@@ -44,7 +46,7 @@ builder.Services.AddScoped<IRolRepository, RolRepository>();
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 
-var app = builder.Build();
+var app = builder.Build(); // line 48
 
 app.Use(async (context, next) =>
 {

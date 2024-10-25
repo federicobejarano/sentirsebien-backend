@@ -46,6 +46,11 @@ namespace sentirsebien_backend.DataAccess.DbContexts
                 .HasForeignKey<sentirsebien_backend.DataAccess.Models.Personal>(c => c.ID_Usuario)  // clave foránea de usuario
                 .IsRequired(); // clave foránea es necesaria
 
+            // Configuración de UsuarioRol
+
+            modelBuilder.Entity<UsuarioRol>()
+                .HasKey(ur => new { ur.ID_Usuario, ur.ID_Rol });
+
             // relación N:M Usuario - Rol
 
             modelBuilder.Entity<sentirsebien_backend.DataAccess.Models.Usuario>() // relación entre Usuario y UsuarioRol
