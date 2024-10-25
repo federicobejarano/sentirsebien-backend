@@ -4,7 +4,7 @@ namespace sentirsebien_backend.DataAccess.Repositories
 {
     public interface IPermisoRepository
     {
-        sentirsebien_backend.Domain.Entities.Permiso ObtenerPermisoPorNombre(string nombre);
+        sentirsebien_backend.Domain.Entities.Permiso ObtenerPermisoPorTipo(string nombre);
 
         void CrearPermiso(sentirsebien_backend.Domain.Entities.Permiso permiso);
 
