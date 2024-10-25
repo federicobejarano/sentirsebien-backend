@@ -1,5 +1,4 @@
-﻿using sentirsebien_backend.Domain.Entities;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
 namespace sentirsebien_backend.DataAccess.Models
