@@ -9,8 +9,14 @@ namespace sentirsebien_backend.Application.Services
 {
     public class TokenService : ITokenService
     {
-        private const string SecretKey = "TuClaveSecretaSuperSegura"; // debe ser configurable a través de appsettings.json o variables de entorno
-        private const int ExpirationMinutes = 30;
+        private readonly string _secretKey;
+        private readonly int _expirationMinutes;
+
+        public TokenService(IConfiguration configuration)
+        {
+            _secretKey = configuration["JwtSettings:SecretKey"];
+            _expirationMinutes = int.Parse(configuration["JwtSettings:ExpirationMinutes"]);
+        }
 
         public async Task<TokenAutenticacion> GenerarTokenAsync(DatosDeAutenticacionUsuario datosDeAutenticacion, DatosDeAutorizacionUsuario datosDeAutorizacion)
         {
@@ -36,12 +42,12 @@ namespace sentirsebien_backend.Application.Services
             }
 
             // crear clave de seguridad
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SecretKey));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             // configurar fechas
             var fechaCreacion = DateTime.UtcNow;
-            var fechaExpiracion = fechaCreacion.AddMinutes(ExpirationMinutes);
+            var fechaExpiracion = fechaCreacion.AddMinutes(_expirationMinutes);
 
             // crear token
             var token = new JwtSecurityToken(
@@ -71,7 +77,7 @@ namespace sentirsebien_backend.Application.Services
         public async Task<bool> ValidarTokenAsync(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(SecretKey);
+            var key = Encoding.UTF8.GetBytes(_secretKey);
 
             try
             {
